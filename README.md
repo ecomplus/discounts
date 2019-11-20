@@ -18,4 +18,4 @@ Variable              | Value
 `APP_BASE_URI`        | `https://discounts.ecomplus.biz`
 `DB_PATH`             | `~/app/db.sqlite`
 `ECOM_AUTH_DB`        | `~/app/db.sqlite`
-`DAEMON_SERVICES`     | `true`
+`ECOM_AUTH_UPDATE`    | `enabled`
