@@ -3,7 +3,7 @@
   "private": true,
   "author": "E-Com Club <ti@e-com.club>",
   "license": "GPL-3.0",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Default E-Com Plus app for complex discount rules",
   "main": "main.js",
   "scripts": {
