@@ -1,34 +1,31 @@
 {
-  "name": "@ecomplus/express-app-boilerplate",
+  "name": "@ecomplus/discounts",
   "private": true,
-  "version": "0.1.1",
-  "description": "Boilerplate for E-Com Plus apps with Express",
-  "main": "app/main.js",
+  "author": "E-Com Club <ti@e-com.club>",
+  "license": "GPL-3.0",
+  "version": "0.0.1",
+  "description": "Default E-Com Plus app for complex discount rules",
+  "main": "main.js",
   "scripts": {
+    "test": "node ./main.js",
     "release": "standard-version"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ecomclub/express-app-boilerplate.git"
+  "dependencies": {
+    "console-files": "2.x",
+    "ecomplus-app-sdk": "1.x",
+    "express": "4.x"
   },
-  "keywords": [
-    "ecomplus",
-    "ecomplus-app",
-    "boilerplate",
-    "express-app",
-    "app-boilerplate"
-  ],
-  "author": "E-Com Club <ti@e-com.club>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ecomclub/express-app-boilerplate/issues"
-  },
-  "homepage": "https://github.com/ecomclub/express-app-boilerplate#readme",
   "devDependencies": {
-    "@commitlint/cli": "^8.0.0",
-    "@commitlint/config-conventional": "^8.0.0",
-    "husky": "^2.4.1",
-    "standard": "^12.0.1",
+    "@commitlint/cli": "^8.2.0",
+    "@commitlint/config-conventional": "^8.2.0",
+    "husky": "^3.0.9",
+    "semver": "^6.3.0",
+    "standard": "^14.3.1",
     "standard-version": "^7.0.0"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
   }
 }

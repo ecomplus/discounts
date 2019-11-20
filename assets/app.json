@@ -1,0 +1,11 @@
+{
+  "app_id": 8001,
+  "state": "active",
+  "title": "Discounts",
+  "slug": "discounts",
+  "version": "0.0.1",
+  "type": "external",
+  "authentication": false,
+  "admin_settings": {
+  }
+}
