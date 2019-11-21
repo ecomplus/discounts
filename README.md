@@ -1,7 +1,7 @@
 # discounts
 
 [![CodeFactor](https://www.codefactor.io/repository/github/ecomclub/discounts/badge)](https://www.codefactor.io/repository/github/ecomclub/discounts)
-[![license mit](https://img.shields.io/badge/License-GPL-orange.svg)](https://opensource.org/licenses/GPL-3.0)
+[![License Apache-2.0](https://img.shields.io/badge/License-Apache-orange.svg)](https://opensource.org/licenses/Apache-2.0)
 
 Default E-Com Plus app for complex discount rules
 
