@@ -58,7 +58,7 @@
             "discount_coupon": {
               "type": "string",
               "maxLength": 255,
-              "title": "Cupom de desconto"
+              "title": "Cupom de desconto",
               "description": "Se preenchido, o desconto será aplicado apenas com a inserção do cupom"
             },
             "utm_campaign": {
