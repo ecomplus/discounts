@@ -33,16 +33,7 @@ module.exports = () => {
 
     // params object follows list payments request schema:
     // https://apx-mods.e-com.plus/api/v1/apply_discount/schema.json?store_id=100
-    let totalValue
-    if (params.amount) {
-      totalValue = params.amount.total
-    }
-
-    // start mounting response body
-    // https://apx-mods.e-com.plus/api/v1/apply_discount/response_schema.json?store_id=100
-    const response = {}
-
-    if (totalValue > 0) {
+    if (params.amount && params.amount.total > 0) {
       const discountRules = getValidDiscountRules(config.discount_rules)
       if (Array.isArray(discountRules) && discountRules.length) {
         // try to match a promotion
@@ -84,43 +75,50 @@ module.exports = () => {
 
         if (discountRule) {
           if (discountRule.cumulative_discount === false && params.amount.discount) {
-            // :(
-            response.invalid_coupon_message = params.lang === 'pt_br'
-              ? 'A promoção não pôde ser aplicada porque este desconto não é cumulativo'
-              : 'This discount is not cumulative'
-          } else {
-            // we have a discount to apply \o/
-            let discountValue = 0
-            const { discount } = discountRule
-            const maxDiscount = params.amount[discount.apply_at || 'total']
-            if (maxDiscount) {
-              // update amount discount and total
-              if (discount.type === 'percentage') {
-                discountValue = maxDiscount * discount.value / 100
-              } else {
-                discountValue = discount.value
-              }
-              if (discountValue > maxDiscount) {
-                discountValue = maxDiscount
-              }
-            }
+            // explain discount can't be applied :(
+            // https://apx-mods.e-com.plus/api/v1/apply_discount/response_schema.json?store_id=100
+            return res.send({
+              invalid_coupon_message: params.lang === 'pt_br'
+                ? 'A promoção não pôde ser aplicada porque este desconto não é cumulativo'
+                : 'This discount is not cumulative'
+            })
+          }
 
-            // add discount to response object
-            response.discount_rule = {
+          // we have a discount to apply \o/
+          let discountValue = 0
+          const { discount } = discountRule
+          const maxDiscount = params.amount[discount.apply_at || 'total']
+          if (maxDiscount) {
+            // update amount discount and total
+            if (discount.type === 'percentage') {
+              discountValue = maxDiscount * discount.value / 100
+            } else {
+              discountValue = discount.value
+            }
+            if (discountValue > maxDiscount) {
+              discountValue = maxDiscount
+            }
+          }
+
+          // add discount to response object
+          const response = {
+            discount_rule: {
               label: discountRule.label || params.discount_coupon || `DISCOUNT ${discountMatchEnum}`,
               extra_discount: {
                 value: discountValue,
                 flags: [discountMatchEnum]
               }
             }
-            if (discountRule.description) {
-              response.discount_rule.description = discountRule.description
-            }
           }
+          if (discountRule.description) {
+            response.discount_rule.description = discountRule.description
+          }
+          return res.send(response)
         }
       }
     }
 
-    res.send(response)
+    // empty response
+    res.send({})
   }
 }
