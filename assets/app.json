@@ -22,6 +22,18 @@
           "title": "Regra de desconto",
           "additionalProperties": false,
           "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 100,
+              "title": "Rótulo",
+              "description": "Título (opcional) da promoção"
+            },
+            "description": {
+              "type": "string",
+              "maxLength": 1000,
+              "title": "Descrição",
+              "description": "Texto com informações adicionais sobre a promoção"
+            },
             "date_range": {
               "type": "object",
               "title": "Período de validade",
