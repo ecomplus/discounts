@@ -7,6 +7,7 @@ const getValidDiscountRules = discountRules => {
       if (!rule || !rule.discount || !rule.discount.value) {
         return false
       }
+
       // filter by date first
       const timestamp = Date.now()
       if (rule.date_range) {
@@ -20,7 +21,52 @@ const getValidDiscountRules = discountRules => {
       return true
     })
   }
+
+  // returns array anyway
   return []
+}
+
+const matchDiscountRule = (discountRules, params) => {
+  // try to match a promotion
+  if (params.discount_coupon) {
+    // match only by discount coupon
+    return {
+      discountRule: discountRules.find(rule => rule.discount_coupon === params.discount_coupon),
+      discountMatchEnum: 'COUPON'
+    }
+  }
+
+  // try to match by UTM campaign first
+  if (params.utm && params.utm.campaign) {
+    const discountRule = discountRules.find(rule => rule.utm_campaign === params.utm.campaign)
+    if (discountRule) {
+      return {
+        discountRule,
+        discountMatchEnum: 'UTM'
+      }
+    }
+  }
+
+  // then try to match by customer
+  if (params.customer && params.customer._id) {
+    const discountRule = discountRules.find(rule => Array.isArray(rule.customer_ids) &&
+      rule.customer_ids.indexOf(params.customer._id) > -1)
+    if (discountRule) {
+      return {
+        discountRule,
+        discountMatchEnum: 'CUSTOMER'
+      }
+    }
+  }
+
+  // last try to match by open promotions
+  return {
+    discountRule: discountRules.find(rule => {
+      return !rule.utm.campaign && !rule.utm_campaign &&
+        (!Array.isArray(rule.customer_ids) || !rule.customer_ids.length)
+    }),
+    discountMatchEnum: 'OPEN'
+  }
 }
 
 module.exports = () => {
@@ -35,44 +81,8 @@ module.exports = () => {
     // https://apx-mods.e-com.plus/api/v1/apply_discount/schema.json?store_id=100
     if (params.amount && params.amount.total > 0) {
       const discountRules = getValidDiscountRules(config.discount_rules)
-      if (Array.isArray(discountRules) && discountRules.length) {
-        // try to match a promotion
-        let discountRule
-        let discountMatchEnum = 'OPEN'
-
-        if (params.discount_coupon) {
-          // match only by discount coupon
-          discountRule = discountRules.find(rule => rule.discount_coupon === params.discount_coupon)
-          discountMatchEnum = 'COUPON'
-        } else {
-          // try to match by UTM campaign first
-          if (params.utm && params.utm.campaign) {
-            discountRule = discountRules.find(rule => rule.utm_campaign === params.utm.campaign)
-            if (discountRule) {
-              discountMatchEnum = 'UTM'
-            }
-          }
-
-          if (!discountRule) {
-            // then try to match by customer
-            if (params.customer && params.customer._id) {
-              discountRule = discountRules.find(rule => Array.isArray(rule.customer_ids) &&
-                rule.customer_ids.indexOf(params.customer._id) > -1)
-              if (discountRule) {
-                discountMatchEnum = 'CUSTOMER'
-              }
-            }
-          }
-
-          if (!discountRule) {
-            // last try to match by open promotions
-            discountRule = discountRules.find(rule => {
-              return !rule.utm.campaign && !rule.utm_campaign &&
-                (!Array.isArray(rule.customer_ids) || !rule.customer_ids.length)
-            })
-          }
-        }
-
+      if (discountRules.length) {
+        const { discountRule, discountMatchEnum } = matchDiscountRule(discountRules, params)
         if (discountRule) {
           if (discountRule.cumulative_discount === false && params.amount.discount) {
             // explain discount can't be applied :(
@@ -101,6 +111,7 @@ module.exports = () => {
           }
 
           // add discount to response object
+          // https://apx-mods.e-com.plus/api/v1/apply_discount/response_schema.json?store_id=100
           const response = {
             discount_rule: {
               label: discountRule.label || params.discount_coupon || `DISCOUNT ${discountMatchEnum}`,
