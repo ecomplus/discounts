@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.3](https://github.com/ecomclub/discounts/compare/v0.1.2...v0.1.3) (2020-01-23)
+
+
+### Bug Fixes
+
+* **apply-discounts:** fix counting orders (result.length) ([3004e21](https://github.com/ecomclub/discounts/commit/3004e21d5300b371a97d755197c905cdb36fb0d0))
+
 ### [0.1.2](https://github.com/ecomclub/discounts/compare/v0.1.1...v0.1.2) (2020-01-23)
 
 
