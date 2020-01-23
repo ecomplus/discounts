@@ -69,11 +69,12 @@ const matchDiscountRule = (discountRules, params) => {
   }
 }
 
-module.exports = () => {
+module.exports = appSdk => {
   return (req, res) => {
+    const { storeId } = req
     // body was already pre-validated on @/bin/web.js
     // treat module request body
-    const { params, application } = req.body
+    const { params, application, customer } = req.body
     // app configured options
     const config = Object.assign({}, application.data, application.hidden_data)
 
@@ -112,9 +113,10 @@ module.exports = () => {
 
           // add discount to response object
           // https://apx-mods.e-com.plus/api/v1/apply_discount/response_schema.json?store_id=100
+          const label = discountRule.label || params.discount_coupon || `DISCOUNT ${discountMatchEnum}`
           const response = {
             discount_rule: {
-              label: discountRule.label || params.discount_coupon || `DISCOUNT ${discountMatchEnum}`,
+              label,
               extra_discount: {
                 value: discountValue,
                 flags: [discountMatchEnum]
@@ -124,7 +126,47 @@ module.exports = () => {
           if (discountRule.description) {
             response.discount_rule.description = discountRule.description
           }
-          return res.send(response)
+
+          if (customer && (discountRule.usage_limit > 0 || discountRule.total_usage_limit > 0)) {
+            // list orders to check discount usage limits
+            return (async function () {
+              const url = `/orders.json?fields=_id&extra_discount.app.label=${label}`
+              const usageLimits = [{
+                // limit by customer
+                query: `${url}&buyers._id=${customer._id}`,
+                max: discountRule.usage_limit
+              }, {
+                // total limit
+                query: '',
+                max: discountRule.total_usage_limit
+              }]
+
+              for (let i = 0; i < usageLimits.length; i++) {
+                const { query, max } = usageLimits[i]
+                if (max) {
+                  let countOrders
+                  try {
+                    // send Store API request to list orders with filters
+                    countOrders = await appSdk.apiRequest(storeId, `${url}${query}`).result
+                  } catch (e) {
+                    countOrders = max
+                  }
+
+                  if (countOrders >= max) {
+                    // limit reached
+                    return res.send({
+                      invalid_coupon_message: params.lang === 'pt_br'
+                        ? 'A promoção não pôde ser aplicada porque já atingiu o limite de usos'
+                        : 'The promotion could not be applied because it has already reached the usage limit'
+                    })
+                  }
+                }
+              }
+              res.send(response)
+            })()
+          } else {
+            return res.send(response)
+          }
         }
       }
     }
