@@ -147,7 +147,7 @@ module.exports = appSdk => {
                   let countOrders
                   try {
                     // send Store API request to list orders with filters
-                    countOrders = await appSdk.apiRequest(storeId, `${url}${query}`).result
+                    countOrders = await appSdk.apiRequest(storeId, `${url}${query}`).result.length
                   } catch (e) {
                     countOrders = max
                   }
