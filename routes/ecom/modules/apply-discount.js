@@ -74,7 +74,7 @@ module.exports = appSdk => {
     const { storeId } = req
     // body was already pre-validated on @/bin/web.js
     // treat module request body
-    const { params, application, customer } = req.body
+    const { params, application } = req.body
     // app configured options
     const config = Object.assign({}, application.data, application.hidden_data)
 
@@ -127,7 +127,11 @@ module.exports = appSdk => {
             response.discount_rule.description = discountRule.description
           }
 
-          if (customer && (discountRule.usage_limit > 0 || discountRule.total_usage_limit > 0)) {
+          const { customer } = params
+          if (
+            customer && customer._id &&
+            (discountRule.usage_limit > 0 || discountRule.total_usage_limit > 0)
+          ) {
             // list orders to check discount usage limits
             return (async function () {
               const url = `/orders.json?fields=_id&extra_discount.app.label=${label}`
