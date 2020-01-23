@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.4](https://github.com/ecomclub/discounts/compare/v0.1.3...v0.1.4) (2020-01-23)
+
+
+### Bug Fixes
+
+* **apply-discount:** fix checking customer from params ([0368974](https://github.com/ecomclub/discounts/commit/03689746eb9645ccc3b9fb3e5456eabd29579b06))
+
 ### [0.1.3](https://github.com/ecomclub/discounts/compare/v0.1.2...v0.1.3) (2020-01-23)
 
 
