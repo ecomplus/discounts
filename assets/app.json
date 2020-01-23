@@ -3,9 +3,15 @@
   "state": "active",
   "title": "Campanhas e descontos",
   "slug": "discounts",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "type": "external",
-  "authentication": false,
+  "authentication": true,
+  "auth_callback_uri": "https://discounts.ecomplus.biz/ecom/auth-callback",
+  "auth_scope": {
+    "orders": [
+      "GET"
+    ]
+  },
   "modules": {
     "apply_discount": {
       "endpoint": "https://discounts.ecomplus.biz/ecom/modules/apply-discount"
@@ -67,6 +73,20 @@
               "type": "string",
               "maxLength": 200
             },
+            "usage_limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "title": "Limite de uso por cliente",
+              "description": "Limite opcional de aplicação do desconto para cada cliente"
+            },
+            "total_usage_limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "title": "Limite de uso total",
+              "description": "Limite opcional de aplicação do desconto até desativá-lo"
+            },
             "customer_ids": {
               "title": "Lista de clientes selecionados",
               "description": "Se preenchido, o desconto será disponibilizado apenas para estes clientes",
@@ -100,6 +120,7 @@
                   "type": "integer",
                   "minimum": 1,
                   "maximum": 999999999,
+                  "title": "Valor mínimo",
                   "description": "Montante mínimo para aplicar o desconto"
                 },
                 "type": {
