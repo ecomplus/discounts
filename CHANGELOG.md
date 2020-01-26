@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/ecomclub/discounts/compare/v1.0.0...v1.1.0) (2020-01-26)
+
+
+### Features
+
+* **apply-discount:** set discount rule as available discount to apply ([8ddf6c4](https://github.com/ecomclub/discounts/commit/8ddf6c49234cca6958e388bc50b0a1a46bfda4ef))
+
 ## [1.0.0](https://github.com/ecomclub/discounts/compare/v0.1.4...v1.0.0) (2020-01-23)
 
 ### [0.1.4](https://github.com/ecomclub/discounts/compare/v0.1.3...v0.1.4) (2020-01-23)
