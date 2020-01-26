@@ -62,7 +62,7 @@ const matchDiscountRule = (discountRules, params) => {
   // last try to match by open promotions
   return {
     discountRule: discountRules.find(rule => {
-      return !rule.utm.campaign && !rule.utm_campaign &&
+      return !rule.discount_coupon && !rule.utm_campaign &&
         (!Array.isArray(rule.customer_ids) || !rule.customer_ids.length)
     }),
     discountMatchEnum: 'OPEN'
