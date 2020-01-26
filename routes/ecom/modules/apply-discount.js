@@ -78,13 +78,30 @@ module.exports = appSdk => {
     // app configured options
     const config = Object.assign({}, application.data, application.hidden_data)
 
-    // params object follows list payments request schema:
-    // https://apx-mods.e-com.plus/api/v1/apply_discount/schema.json?store_id=100
-    if (params.amount && params.amount.total > 0) {
-      const discountRules = getValidDiscountRules(config.discount_rules)
-      if (discountRules.length) {
-        const { discountRule, discountMatchEnum } = matchDiscountRule(discountRules, params)
-        if (discountRule) {
+    // setup response object
+    // https://apx-mods.e-com.plus/api/v1/apply_discount/response_schema.json?store_id=100
+    const response = {}
+    const discountRules = getValidDiscountRules(config.discount_rules)
+    if (discountRules.length) {
+      const { discountRule, discountMatchEnum } = matchDiscountRule(discountRules, params)
+      if (discountRule) {
+        const { label, discount } = discountRule
+        if (discount.apply_at !== 'freight') {
+          // show current discount rule as available discount to apply
+          response.available_extra_discount = { label }
+          ;['min_amount', 'type', 'value'].forEach(field => {
+            if (discount[field]) {
+              response.available_extra_discount[field] = discount[field]
+            }
+          })
+        }
+
+        // params object follows list payments request schema:
+        // https://apx-mods.e-com.plus/api/v1/apply_discount/schema.json?store_id=100
+        if (
+          params.amount && params.amount.total > 0 &&
+          !(discountRule.discount.min_amount > params.amount.total)
+        ) {
           if (discountRule.cumulative_discount === false && params.amount.discount) {
             // explain discount can't be applied :(
             // https://apx-mods.e-com.plus/api/v1/apply_discount/response_schema.json?store_id=100
@@ -114,13 +131,11 @@ module.exports = appSdk => {
           // add discount to response object
           // https://apx-mods.e-com.plus/api/v1/apply_discount/response_schema.json?store_id=100
           const label = discountRule.label || params.discount_coupon || `DISCOUNT ${discountMatchEnum}`
-          const response = {
-            discount_rule: {
-              label,
-              extra_discount: {
-                value: discountValue,
-                flags: [discountMatchEnum]
-              }
+          response.discount_rule = {
+            label,
+            extra_discount: {
+              value: discountValue,
+              flags: [discountMatchEnum]
             }
           }
           if (discountRule.description) {
@@ -175,7 +190,7 @@ module.exports = appSdk => {
       }
     }
 
-    // empty response
-    res.send({})
+    // response with no error nor discount applied
+    res.send(response)
   }
 }
