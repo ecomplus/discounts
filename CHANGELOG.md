@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.1](https://github.com/ecomclub/discounts/compare/v1.1.0...v1.1.1) (2020-01-26)
+
+
+### Bug Fixes
+
+* **apply-discount:** fix handling last try to match by open promotions ([706f5e8](https://github.com/ecomclub/discounts/commit/706f5e8502116d01b7e048abb5c58ee276b4a30a))
+
 ## [1.1.0](https://github.com/ecomclub/discounts/compare/v1.0.0...v1.1.0) (2020-01-26)
 
 
