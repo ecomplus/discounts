@@ -128,15 +128,17 @@ module.exports = appSdk => {
             }
           }
 
-          for (let i = 0; i < kitDiscount.product_ids.length; i++) {
-            const productId = kitDiscount.product_ids[i]
-            if (productId && !params.items.find(item => item.quantity && item.product_id === productId)) {
-              // product not on current cart
-              return
+          if (!params.amount || !(kitDiscount.discount.min_amount > params.amount.total)) {
+            for (let i = 0; i < kitDiscount.product_ids.length; i++) {
+              const productId = kitDiscount.product_ids[i]
+              if (productId && !params.items.find(item => item.quantity && item.product_id === productId)) {
+                // product not on current cart
+                return
+              }
             }
+            // apply cumulative discount \o/
+            addDiscount(kitDiscount.discount, `KIT-${(index + 1)}`)
           }
-          // apply cumulative discount \o/
-          addDiscount(kitDiscount.discount, `KIT-${(index + 1)}`)
         }
       })
     }
