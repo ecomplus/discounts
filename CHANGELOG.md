@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/ecomplus/discounts/compare/v1.1.2...v1.2.0) (2020-04-10)
+
+
+### Features
+
+* **apply-discount:** handling product kit discounts :tada: ([5db099b](https://github.com/ecomplus/discounts/commit/5db099bd85007e524c62d15aa0d496e7c5dd3a3c))
+
+
+### Bug Fixes
+
+* **apply-discount:** also check min amount (if any) for kit discount ([bbd14c2](https://github.com/ecomplus/discounts/commit/bbd14c249c8f496db8e5087bc62282d75c591f30))
+* **apply-discount:** fix getting response data from api request ([7c54174](https://github.com/ecomplus/discounts/commit/7c54174cba7a26174a8092f405de2b924cbdbc37))
+
 ### [1.1.2](https://github.com/ecomplus/discounts/compare/v1.1.1...v1.1.2) (2020-04-10)
 
 
