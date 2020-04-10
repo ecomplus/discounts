@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.2](https://github.com/ecomplus/discounts/compare/v1.1.1...v1.1.2) (2020-04-10)
+
+
+### Bug Fixes
+
+* **apply-discount:** fix checking date range start and end ([a429244](https://github.com/ecomplus/discounts/commit/a429244ee1ba5cc41c7659ff142bd31dc663ac6b))
+* **apply-discount:** fix mounting url to check discount usage limit ([697abda](https://github.com/ecomplus/discounts/commit/697abda166431a0e86f9930195e9c3530cc87338))
+
 ### [1.1.1](https://github.com/ecomclub/discounts/compare/v1.1.0...v1.1.1) (2020-01-26)
 
 
