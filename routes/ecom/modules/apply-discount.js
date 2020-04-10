@@ -152,7 +152,7 @@ module.exports = appSdk => {
               const url = `/orders.json?fields=_id&extra_discount.app.label=${label}`
               const usageLimits = [{
                 // limit by customer
-                query: `${url}&buyers._id=${customer._id}`,
+                query: `&buyers._id=${customer._id}`,
                 max: discountRule.usage_limit
               }, {
                 // total limit
