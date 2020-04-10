@@ -81,6 +81,66 @@ module.exports = appSdk => {
     // setup response object
     // https://apx-mods.e-com.plus/api/v1/apply_discount/response_schema.json?store_id=100
     const response = {}
+
+    const addDiscount = (discount, flag) => {
+      let value
+      const maxDiscount = params.amount[discount.apply_at || 'total']
+      if (maxDiscount) {
+        // update amount discount and total
+        if (discount.type === 'percentage') {
+          value = maxDiscount * discount.value / 100
+        } else {
+          value = discount.value
+        }
+        if (value > maxDiscount) {
+          value = maxDiscount
+        }
+      }
+
+      if (response.discount_rule) {
+        // accumulate discount
+        const extraDiscount = response.discount_rule.extra_discount
+        extraDiscount.value += value
+        if (extraDiscount.flags.length < 20) {
+          extraDiscount.flags.push(flag)
+        }
+      } else {
+        response.discount_rule = {
+          extra_discount: {
+            value,
+            flags: [flag]
+          }
+        }
+      }
+    }
+
+    if (params.items && params.items.length) {
+      // try product kit discounts first
+      const kitDiscounts = getValidDiscountRules(config.product_kit_discounts)
+      kitDiscounts.forEach((kitDiscount, index) => {
+        if (kitDiscount && Array.isArray(kitDiscount.product_ids)) {
+          if (kitDiscount.min_quantity) {
+            // check total items quantity
+            let totalQuantity = 0
+            params.items.forEach(({ quantity }) => { totalQuantity += quantity })
+            if (totalQuantity < kitDiscount.min_quantity) {
+              return
+            }
+          }
+
+          for (let i = 0; i < kitDiscount.product_ids.length; i++) {
+            const productId = kitDiscount.product_ids[i]
+            if (productId && !params.items.find(item => item.quantity && item.product_id === productId)) {
+              // product not on current cart
+              return
+            }
+          }
+          // apply cumulative discount \o/
+          addDiscount(kitDiscount.discount, `KIT-${(index + 1)}`)
+        }
+      })
+    }
+
     const discountRules = getValidDiscountRules(config.discount_rules)
     if (discountRules.length) {
       const { discountRule, discountMatchEnum } = matchDiscountRule(discountRules, params)
@@ -102,10 +162,14 @@ module.exports = appSdk => {
           params.amount && params.amount.total > 0 &&
           !(discountRule.discount.min_amount > params.amount.total)
         ) {
-          if (discountRule.cumulative_discount === false && params.amount.discount) {
+          if (
+            discountRule.cumulative_discount === false &&
+            (response.discount_rule || params.amount.discount)
+          ) {
             // explain discount can't be applied :(
             // https://apx-mods.e-com.plus/api/v1/apply_discount/response_schema.json?store_id=100
             return res.send({
+              ...response,
               invalid_coupon_message: params.lang === 'pt_br'
                 ? 'A promoção não pôde ser aplicada porque este desconto não é cumulativo'
                 : 'This discount is not cumulative'
@@ -113,31 +177,10 @@ module.exports = appSdk => {
           }
 
           // we have a discount to apply \o/
-          let discountValue = 0
-          const { discount } = discountRule
-          const maxDiscount = params.amount[discount.apply_at || 'total']
-          if (maxDiscount) {
-            // update amount discount and total
-            if (discount.type === 'percentage') {
-              discountValue = maxDiscount * discount.value / 100
-            } else {
-              discountValue = discount.value
-            }
-            if (discountValue > maxDiscount) {
-              discountValue = maxDiscount
-            }
-          }
-
-          // add discount to response object
-          // https://apx-mods.e-com.plus/api/v1/apply_discount/response_schema.json?store_id=100
-          const label = discountRule.label || params.discount_coupon || `DISCOUNT ${discountMatchEnum}`
-          response.discount_rule = {
-            label,
-            extra_discount: {
-              value: discountValue,
-              flags: [discountMatchEnum]
-            }
-          }
+          addDiscount(discountRule.discount, discountMatchEnum)
+          // add discount label and description if any
+          response.discount_rule.label = discountRule.label || params.discount_coupon ||
+            `DISCOUNT ${discountMatchEnum}`
           if (discountRule.description) {
             response.discount_rule.description = discountRule.description
           }
@@ -175,6 +218,7 @@ module.exports = appSdk => {
                   if (countOrders >= max) {
                     // limit reached
                     return res.send({
+                      ...response,
                       invalid_coupon_message: params.lang === 'pt_br'
                         ? 'A promoção não pôde ser aplicada porque já atingiu o limite de usos'
                         : 'The promotion could not be applied because it has already reached the usage limit'
