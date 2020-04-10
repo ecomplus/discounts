@@ -1,11 +1,11 @@
-# discounts
+# Discounts
 
-[![CodeFactor](https://www.codefactor.io/repository/github/ecomclub/discounts/badge)](https://www.codefactor.io/repository/github/ecomclub/discounts)
+[![CodeFactor](https://www.codefactor.io/repository/github/ecomplus/discounts/badge)](https://www.codefactor.io/repository/github/ecomplus/discounts)
 [![License Apache-2.0](https://img.shields.io/badge/License-Apache-orange.svg)](https://opensource.org/licenses/Apache-2.0)
 
 Default E-Com Plus app for complex discount rules
 
-[Changelog](https://github.com/ecomclub/discounts/blob/master/CHANGELOG.md)
+[CHANGELOG](https://github.com/ecomplus/discounts/blob/master/CHANGELOG.md)
 
 ## About
 
@@ -18,23 +18,23 @@ with filters (optionals) by date range _AND_
 discount coupon, UTM campaign _OR_ customer IDs.
 
 `hidden_data` expected object model is defined (JSON Schema) on
-[app `admin_settings`](https://github.com/ecomclub/discounts/blob/master/assets/app.json).
+[app `admin_settings`](https://github.com/ecomplus/discounts/blob/master/assets/application.json).
 
 It's based on
-[E-Com Plus Express App Boilerplate](https://github.com/ecomclub/express-app-boilerplate),
+[E-Com Plus Express App Boilerplate](https://github.com/ecomplus/express-app-boilerplate),
 application installation and authentication was kept as is
 with original endpoints from boilerplate source:
 
-- [`/bin/web.js`](https://github.com/ecomclub/discounts/blob/master/bin/web.js):
+- [`/bin/web.js`](https://github.com/ecomplus/discounts/blob/master/bin/web.js):
 Express web server setup);
-- [`/routes/ecom/auth-callback.js`](https://github.com/ecomclub/discounts/blob/master/routes/ecom/auth-callback.js):
+- [`/routes/ecom/auth-callback.js`](https://github.com/ecomplus/discounts/blob/master/routes/ecom/auth-callback.js):
 Endpoint for
 [E-Com Plus Authentication Callback](https://developers.e-com.plus/docs/api/#/store/authenticate-app/authenticate-app);
 
 ### Apply discount module endpoint
 
 Additional endpoint was created to handle `apply_discount`
-([`/ecom/modules/apply-discount.js`](https://github.com/ecomclub/discounts/blob/master/routes/ecom/modules/apply-discount.js))
+([`/ecom/modules/apply-discount.js`](https://github.com/ecomplus/discounts/blob/master/routes/ecom/modules/apply-discount.js))
 module, it receives requests from Modules API on stores with this app installed.
 
 It'll receive _POST_ with body like:
@@ -73,7 +73,7 @@ const body = {
 - [Full `params` object reference](https://apx-mods.e-com.plus/api/v1/apply_discount/schema.json?store_id=100)
 from Modules API docs;
 - `hidden_data.discount_rules` object reference on
-[app.json](https://github.com/ecomclub/discounts/blob/master/assets/app.json)
+[application.json](https://github.com/ecomplus/discounts/blob/master/assets/application.json)
 `admin_settings.discount_rules.schema` property.
 
 And will respond like:
@@ -128,6 +128,6 @@ Published at https://discounts.ecomplus.biz
 ### Continuous deployment
 
 When new version is **production ready**,
-[create a new release](https://github.com/ecomclub/discounts/releases)
+[create a new release](https://github.com/ecomplus/discounts/releases)
 (or `npm run release`) to run automatic deploy from _master_ branch
 and (re)publish the app.
