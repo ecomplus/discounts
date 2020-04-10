@@ -11,10 +11,10 @@ const getValidDiscountRules = discountRules => {
       // filter by date first
       const timestamp = Date.now()
       if (rule.date_range) {
-        if (rule.date_range.start && new Date(rule.date_range.start).getTime() < timestamp) {
+        if (rule.date_range.start && new Date(rule.date_range.start).getTime() > timestamp) {
           return false
         }
-        if (rule.date_range.end && new Date(rule.date_range.end).getTime() > timestamp) {
+        if (rule.date_range.end && new Date(rule.date_range.end).getTime() < timestamp) {
           return false
         }
       }
