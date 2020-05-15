@@ -147,6 +147,16 @@
                 }
               }
             },
+            "product_ids": {
+              "title": "Lista de produtos da campanha",
+              "description": "Se preenchido, o desconto só será válido se um dos produtos estiver no carrinho",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{24}$",
+                "title": "ID do produto"
+              }
+            },
             "cumulative_discount": {
               "type": "boolean",
               "default": true,

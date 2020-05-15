@@ -157,6 +157,28 @@ module.exports = appSdk => {
     if (discountRules.length) {
       const { discountRule, discountMatchEnum } = matchDiscountRule(discountRules, params)
       if (discountRule) {
+        const campaignProducts = discountRule.product_ids
+        if (Array.isArray(campaignProducts) && campaignProducts.length) {
+          // must check at least one campaign product on cart
+          let hasProductMatch
+          if (params.items && params.items.length) {
+            for (let i = 0; i < campaignProducts.length; i++) {
+              if (params.items.find(item => item.quantity && item.product_id === campaignProducts[i])) {
+                hasProductMatch = true
+                break
+              }
+            }
+          }
+          if (!hasProductMatch) {
+            return res.send({
+              ...response,
+              invalid_coupon_message: params.lang === 'pt_br'
+                ? 'Nenhum produto da promoção está incluído no carrinho'
+                : 'No promotion products are included in the cart'
+            })
+          }
+        }
+
         const { label, discount } = discountRule
         if (discount.apply_at !== 'freight') {
           // show current discount rule as available discount to apply
