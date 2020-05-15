@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/ecomplus/discounts/compare/v1.2.0...v1.3.0) (2020-05-15)
+
+
+### Features
+
+* **campaign-products:** handle 'product_ids' discount rule option ([a055cda](https://github.com/ecomplus/discounts/commit/a055cda5c318b854e1dcc39cdac8ef343358e0c3))
+* **case-insensitve:** handle 'case_insensitive' discount rule option ([7fc32fd](https://github.com/ecomplus/discounts/commit/7fc32fd8b1bcebd40506e7fa355c76cec68712c4))
+
+
+### Bug Fixes
+
+* **deps:** replace ecomplus-app-sdk with @ecomplus/application-sdk ([f714723](https://github.com/ecomplus/discounts/commit/f7147234794ec21582e860fe732433cece798eb0))
+
 ## [1.2.0](https://github.com/ecomplus/discounts/compare/v1.1.2...v1.2.0) (2020-04-10)
 
 
