@@ -31,14 +31,24 @@ const matchDiscountRule = (discountRules, params) => {
   if (params.discount_coupon) {
     // match only by discount coupon
     return {
-      discountRule: discountRules.find(rule => rule.discount_coupon === params.discount_coupon),
+      discountRule: discountRules.find(rule => {
+        return rule.case_insensitive
+          ? typeof rule.discount_coupon === 'string' &&
+            rule.discount_coupon.toUpperCase() === params.discount_coupon.toUpperCase()
+          : rule.discount_coupon === params.discount_coupon
+      }),
       discountMatchEnum: 'COUPON'
     }
   }
 
   // try to match by UTM campaign first
   if (params.utm && params.utm.campaign) {
-    const discountRule = discountRules.find(rule => rule.utm_campaign === params.utm.campaign)
+    const discountRule = discountRules.find(rule => {
+      return rule.case_insensitive
+        ? typeof rule.utm_campaign === 'string' &&
+          rule.utm_campaign.toUpperCase() === params.utm.campaign.toUpperCase()
+        : rule.utm_campaign === params.utm.campaign
+    })
     if (discountRule) {
       return {
         discountRule,
