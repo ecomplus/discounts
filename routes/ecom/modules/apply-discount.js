@@ -1,6 +1,6 @@
 'use strict'
 
-import { price as getPrice } from '@ecomplus/utils'
+const ecomUtils = require('@ecomplus/utils')
 
 const getValidDiscountRules = (discountRules, items) => {
   if (Array.isArray(discountRules) && discountRules.length) {
@@ -14,7 +14,7 @@ const getValidDiscountRules = (discountRules, items) => {
         // set/add discount value from lowest item price
         let value
         items.forEach(item => {
-          const price = getPrice(item)
+          const price = ecomUtils.price(item)
           if (
             price > 0 &&
             rule.product_ids.indexOf(item.product_id) > -1 &&
