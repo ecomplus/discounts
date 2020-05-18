@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.1](https://github.com/ecomplus/discounts/compare/v1.4.0...v1.4.1) (2020-05-18)
+
+
+### Bug Fixes
+
+* **apply-discount:** using commonjs instead of es import ([c1fecb5](https://github.com/ecomplus/discounts/commit/c1fecb523ee6ba0afbffbba337301d302d5eb2ea))
+
 ## [1.4.0](https://github.com/ecomplus/discounts/compare/v1.3.0...v1.4.0) (2020-05-18)
 
 
