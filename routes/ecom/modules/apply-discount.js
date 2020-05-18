@@ -1,10 +1,44 @@
 'use strict'
 
-const getValidDiscountRules = discountRules => {
+import { price as getPrice } from '@ecomplus/utils'
+
+const getValidDiscountRules = (discountRules, items) => {
   if (Array.isArray(discountRules) && discountRules.length) {
     // validate rules objects
     return discountRules.filter(rule => {
-      if (!rule || !rule.discount || !rule.discount.value) {
+      if (!rule) {
+        return false
+      }
+
+      if (Array.isArray(rule.product_ids) && rule.discount_lowest_price && Array.isArray(items)) {
+        // set/add discount value from lowest item price
+        let value
+        items.forEach(item => {
+          const price = getPrice(item)
+          if (
+            price > 0 &&
+            rule.product_ids.indexOf(item.product_id) > -1 &&
+            (!value || value > price)
+          ) {
+            value = price
+          }
+        })
+        if (value) {
+          if (rule.discount && rule.discount.value) {
+            if (rule.discount.type === 'percentage') {
+              value *= rule.discount.value / 100
+            } else {
+              value += rule.discount.value
+            }
+          }
+          rule.discount = {
+            ...rule.discount,
+            type: 'fixed',
+            value
+          }
+        }
+      }
+      if (!rule.discount || !rule.discount.value) {
         return false
       }
 
@@ -126,7 +160,7 @@ module.exports = appSdk => {
 
     if (params.items && params.items.length) {
       // try product kit discounts first
-      const kitDiscounts = getValidDiscountRules(config.product_kit_discounts)
+      const kitDiscounts = getValidDiscountRules(config.product_kit_discounts, params.items)
       kitDiscounts.forEach((kitDiscount, index) => {
         if (kitDiscount && Array.isArray(kitDiscount.product_ids)) {
           if (kitDiscount.min_quantity) {

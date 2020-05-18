@@ -177,7 +177,6 @@
           "type": "object",
           "title": "Desconto por kit",
           "required": [
-            "discount",
             "product_ids"
           ],
           "additionalProperties": false,
@@ -217,8 +216,13 @@
               "minimum": 1,
               "maximum": 9999999
             },
+            "discount_lowest_price": {
+              "type": "boolean",
+              "title": "Descontar menor preço",
+              "description": "Aplicar desconto com valor igual ao menor preço entre os produtos selecionados"
+            },
             "discount": {
-              "title": "Desconto concedido",
+              "title": "Desconto predefinido",
               "type": "object",
               "required": [
                 "value"
