@@ -166,7 +166,7 @@ module.exports = appSdk => {
           const kitItems = params.items.filter(item => {
             return item.quantity && kitDiscount.product_ids.indexOf(item.product_id) > -1
           })
-          if (kitDiscount.min_quantity) {
+          if (kitDiscount.min_quantity > 0) {
             // check total items quantity
             let totalQuantity = 0
             kitItems.forEach(({ quantity }) => {
