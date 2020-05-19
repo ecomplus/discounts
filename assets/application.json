@@ -211,10 +211,17 @@
             },
             "min_quantity": {
               "title": "Quantidade mínima no carrinho",
-              "description": "Mínimo de itens (total) no carrinho, deve haver pelo menos 1 de cada produto",
+              "description": "Mínimo de itens (total) no carrinho",
               "type": "integer",
+              "default": 1,
               "minimum": 1,
               "maximum": 9999999
+            },
+            "check_all_items": {
+              "type": "boolean",
+              "default": true,
+              "title": "Checar todos os produtos",
+              "description": "Se deve haver pelo menos 1 unidade de cada produto no carrinho"
             },
             "discount_lowest_price": {
               "type": "boolean",

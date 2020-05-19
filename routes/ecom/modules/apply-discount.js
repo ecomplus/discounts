@@ -163,21 +163,28 @@ module.exports = appSdk => {
       const kitDiscounts = getValidDiscountRules(config.product_kit_discounts, params.items)
       kitDiscounts.forEach((kitDiscount, index) => {
         if (kitDiscount && Array.isArray(kitDiscount.product_ids)) {
+          const kitItems = params.items.filter(item => {
+            return item.quantity && kitDiscount.product_ids.indexOf(item.product_id) > -1
+          })
           if (kitDiscount.min_quantity) {
             // check total items quantity
             let totalQuantity = 0
-            params.items.forEach(({ quantity }) => { totalQuantity += quantity })
+            kitItems.forEach(({ quantity }) => {
+              totalQuantity += quantity
+            })
             if (totalQuantity < kitDiscount.min_quantity) {
               return
             }
           }
 
           if (!params.amount || !(kitDiscount.discount.min_amount > params.amount.total)) {
-            for (let i = 0; i < kitDiscount.product_ids.length; i++) {
-              const productId = kitDiscount.product_ids[i]
-              if (productId && !params.items.find(item => item.quantity && item.product_id === productId)) {
-                // product not on current cart
-                return
+            if (kitDiscount.check_all_items !== false) {
+              for (let i = 0; i < kitDiscount.product_ids.length; i++) {
+                const productId = kitDiscount.product_ids[i]
+                if (productId && !kitItems.find(item => item.quantity && item.product_id === productId)) {
+                  // product not on current cart
+                  return
+                }
               }
             }
             // apply cumulative discount \o/
