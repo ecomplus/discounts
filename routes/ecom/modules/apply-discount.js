@@ -175,6 +175,9 @@ module.exports = appSdk => {
             if (totalQuantity < kitDiscount.min_quantity) {
               return
             }
+            if (kitDiscount.discount.type === 'fixed' && kitDiscount.cumulative_discount) {
+              kitDiscount.discount.value *= Math.floor(totalQuantity / kitDiscount.min_quantity)
+            }
           }
 
           if (!params.amount || !(kitDiscount.discount.min_amount > params.amount.total)) {
