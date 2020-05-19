@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/ecomplus/discounts/compare/v1.4.1...v1.5.0) (2020-05-19)
+
+
+### Features
+
+* **apply-discount:** handling new 'check_all_items' options ([1202c2a](https://github.com/ecomplus/discounts/commit/1202c2a268535c02fe40c2e54f5b3573c0cfa49f))
+
 ### [1.4.1](https://github.com/ecomplus/discounts/compare/v1.4.0...v1.4.1) (2020-05-18)
 
 
