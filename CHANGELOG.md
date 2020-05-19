@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.1](https://github.com/ecomplus/discounts/compare/v1.5.0...v1.5.1) (2020-05-19)
+
+
+### Bug Fixes
+
+* **apply-discount:** handling cumulative kit discount by default ([2ece0b6](https://github.com/ecomplus/discounts/commit/2ece0b6faad5466376e77e0d9c158afed9dfab7a))
+
 ## [1.5.0](https://github.com/ecomplus/discounts/compare/v1.4.1...v1.5.0) (2020-05-19)
 
 
