@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/ecomplus/discounts/compare/v1.5.3...v1.6.0) (2020-06-05)
+
+
+### Features
+
+* **apply-discount:** accepting kits without ids (for all store) ([f298798](https://github.com/ecomplus/discounts/commit/f298798539ab64900e62294353b2fe213cd3d03b))
+* **freebies-rules:** handling gift products (freebies) campaigns ([59b8c4d](https://github.com/ecomplus/discounts/commit/59b8c4de397e519422990634378484d5a1df2353))
+
 ### [1.5.3](https://github.com/ecomplus/discounts/compare/v1.5.2...v1.5.3) (2020-05-19)
 
 
