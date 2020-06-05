@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.2](https://github.com/ecomplus/discounts/compare/v1.6.1...v1.6.2) (2020-06-05)
+
+
+### Bug Fixes
+
+* **apply-discount:** fix matching freebie items ([833ef74](https://github.com/ecomplus/discounts/commit/833ef74f2fc5be7642b518e01240d531081fd562))
+
 ### [1.6.1](https://github.com/ecomplus/discounts/compare/v1.6.0...v1.6.1) (2020-06-05)
 
 
