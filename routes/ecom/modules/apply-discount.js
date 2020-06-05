@@ -213,8 +213,8 @@ module.exports = appSdk => {
           for (let i = 0; i < validFreebiesRules.length; i++) {
             const rule = validFreebiesRules[i]
             if (
-              (!params.amount || !(rule.min_amount > params.amount.total)) &&
-              (!bestRule || bestRule.min_amount < rule.min_amount)
+              (!params.amount || !(rule.min_subtotal > params.amount.subtotal)) &&
+              (!bestRule || bestRule.min_subtotal < rule.min_subtotal)
             ) {
               bestRule = rule
             }
