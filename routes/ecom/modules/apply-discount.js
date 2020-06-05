@@ -226,7 +226,7 @@ module.exports = appSdk => {
             // start calculating discount
             let value = 0
             bestRule.product_ids.forEach(productId => {
-              const item = params.items.find(({ _id }) => productId === _id)
+              const item = params.items.find(item => productId === item.product_id)
               if (item) {
                 value += ecomUtils.price(item)
               }
