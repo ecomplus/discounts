@@ -2,6 +2,20 @@
 
 const ecomUtils = require('@ecomplus/utils')
 
+const checkDateRange = rule => {
+  // filter campaings by date
+  const timestamp = Date.now()
+  if (rule.date_range) {
+    if (rule.date_range.start && new Date(rule.date_range.start).getTime() > timestamp) {
+      return false
+    }
+    if (rule.date_range.end && new Date(rule.date_range.end).getTime() < timestamp) {
+      return false
+    }
+  }
+  return true
+}
+
 const getValidDiscountRules = (discountRules, items) => {
   if (Array.isArray(discountRules) && discountRules.length) {
     // validate rules objects
@@ -42,17 +56,7 @@ const getValidDiscountRules = (discountRules, items) => {
         return false
       }
 
-      // filter by date first
-      const timestamp = Date.now()
-      if (rule.date_range) {
-        if (rule.date_range.start && new Date(rule.date_range.start).getTime() > timestamp) {
-          return false
-        }
-        if (rule.date_range.end && new Date(rule.date_range.end).getTime() < timestamp) {
-          return false
-        }
-      }
-      return true
+      return checkDateRange(rule)
     })
   }
 
@@ -198,6 +202,39 @@ module.exports = appSdk => {
           }
         }
       })
+
+      // gift products (freebies) campaings
+      if (Array.isArray(config.freebies_rules)) {
+        const validFreebiesRules = config.freebies_rules.filter(rule => {
+          return checkDateRange(rule) && Array.isArray(rule.product_ids) && rule.product_ids.length
+        })
+        if (validFreebiesRules) {
+          let bestRule
+          for (let i = 0; i < validFreebiesRules.length; i++) {
+            const rule = validFreebiesRules[i]
+            if (
+              (!params.amount || !(rule.min_amount > params.amount.total)) &&
+              (!bestRule || bestRule.min_amount < rule.min_amount)
+            ) {
+              bestRule = rule
+            }
+          }
+
+          if (bestRule) {
+            // provide freebie products \o/
+            response.freebie_product_ids = bestRule.product_ids
+            // start calculating discount
+            let value = 0
+            bestRule.product_ids.forEach(productId => {
+              const item = params.items.find(({ _id }) => productId === _id)
+              if (item) {
+                value += ecomUtils.price(item)
+              }
+            })
+            addDiscount({ type: 'fixed', value }, 'FREEBIES')
+          }
+        }
+      }
     }
 
     const discountRules = getValidDiscountRules(config.discount_rules)

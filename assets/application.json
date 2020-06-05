@@ -277,6 +277,59 @@
         }
       },
       "hide": false
+    },
+    "freebies_rules": {
+      "schema": {
+        "title": "Brindes",
+        "description": "Adicionar produtos a preço zero com filtro por subtotal",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "title": "Desconto por kit",
+          "required": [
+            "product_ids"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "date_range": {
+              "type": "object",
+              "title": "Período de validade",
+              "description": "Preencha para programar a oferta a datas de início e/ou fim",
+              "additionalProperties": false,
+              "properties": {
+                "start": {
+                  "type": "string",
+                  "format": "date-time",
+                  "title": "Início"
+                },
+                "end": {
+                  "type": "string",
+                  "format": "date-time",
+                  "title": "Encerramento"
+                }
+              }
+            },
+            "product_ids": {
+              "title": "Produto(s) brinde",
+              "description": "Lista de produtos fornecidos como prêmio",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{24}$",
+                "title": "ID do produto"
+              }
+            },
+            "min_amount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 999999999,
+              "title": "Valor mínimo",
+              "description": "Montante mínimo para disponibilizar o brinde"
+            }
+          }
+        }
+      },
+      "hide": false
     }
   }
 }
