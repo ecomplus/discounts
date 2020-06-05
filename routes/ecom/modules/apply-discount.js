@@ -231,7 +231,9 @@ module.exports = appSdk => {
                 value += ecomUtils.price(item)
               }
             })
-            addDiscount({ type: 'fixed', value }, 'FREEBIES')
+            if (value > 0) {
+              addDiscount({ type: 'fixed', value }, 'FREEBIES')
+            }
           }
         }
       }
