@@ -162,10 +162,13 @@ module.exports = appSdk => {
       // try product kit discounts first
       const kitDiscounts = getValidDiscountRules(config.product_kit_discounts, params.items)
       kitDiscounts.forEach((kitDiscount, index) => {
-        if (kitDiscount && Array.isArray(kitDiscount.product_ids)) {
-          const kitItems = params.items.filter(item => {
-            return item.quantity && kitDiscount.product_ids.indexOf(item.product_id) > -1
-          })
+        if (kitDiscount) {
+          const productIds = Array.isArray(kitDiscount.product_ids)
+            ? kitDiscount.product_ids
+            : []
+          const kitItems = productIds.length
+            ? params.items.filter(item => item.quantity && productIds.indexOf(item.product_id) > -1)
+            : params.items
           if (kitDiscount.min_quantity > 0) {
             // check total items quantity
             let totalQuantity = 0
@@ -182,8 +185,8 @@ module.exports = appSdk => {
 
           if (!params.amount || !(kitDiscount.discount.min_amount > params.amount.total)) {
             if (kitDiscount.check_all_items !== false) {
-              for (let i = 0; i < kitDiscount.product_ids.length; i++) {
-                const productId = kitDiscount.product_ids[i]
+              for (let i = 0; i < productIds.length; i++) {
+                const productId = productIds[i]
                 if (productId && !kitItems.find(item => item.quantity && item.product_id === productId)) {
                   // product not on current cart
                   return
