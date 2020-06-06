@@ -209,30 +209,41 @@ module.exports = appSdk => {
           return checkDateRange(rule) && Array.isArray(rule.product_ids) && rule.product_ids.length
         })
         if (validFreebiesRules) {
+          let subtotal = 0
+          params.items.forEach(item => {
+            subtotal += (item.quantity * ecomUtils.price(item))
+          })
+
           let bestRule
+          let discountValue = 0
           for (let i = 0; i < validFreebiesRules.length; i++) {
             const rule = validFreebiesRules[i]
+            // start calculating discount
+            let value = 0
+            rule.product_ids.forEach(productId => {
+              const item = params.items.find(item => productId === item.product_id)
+              if (item) {
+                value += ecomUtils.price(item)
+              }
+            })
+            const fixedSubtotal = subtotal - value
             if (
-              (!params.amount || !(rule.min_subtotal > params.amount.subtotal)) &&
-              (!bestRule || bestRule.min_subtotal < rule.min_subtotal)
+              !(rule.min_subtotal > fixedSubtotal) &&
+              (!bestRule || value > discountValue || bestRule.min_subtotal < rule.min_subtotal)
             ) {
               bestRule = rule
+              discountValue = value
             }
           }
 
           if (bestRule) {
             // provide freebie products \o/
             response.freebie_product_ids = bestRule.product_ids
-            // start calculating discount
-            let value = 0
-            bestRule.product_ids.forEach(productId => {
-              const item = params.items.find(item => productId === item.product_id)
-              if (item) {
-                value += ecomUtils.price(item)
-              }
-            })
-            if (value > 0) {
-              addDiscount({ type: 'fixed', value }, 'FREEBIES')
+            if (discountValue) {
+              addDiscount({
+                type: 'fixed',
+                value: discountValue
+              }, 'FREEBIES')
             }
           }
         }
