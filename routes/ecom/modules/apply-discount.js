@@ -129,6 +129,18 @@ module.exports = appSdk => {
     // setup response object
     // https://apx-mods.e-com.plus/api/v1/apply_discount/response_schema.json?store_id=100
     const response = {}
+    const respondSuccess = () => {
+      if (response.available_extra_discount && !response.available_extra_discount.value) {
+        delete response.available_extra_discount
+      }
+      if (
+        response.discount_rule &&
+        (!response.discount_rule.extra_discount || !response.discount_rule.extra_discount.value)
+      ) {
+        delete response.discount_rule
+      }
+      res.send(response)
+    }
 
     const addDiscount = (discount, flag) => {
       let value
@@ -357,16 +369,16 @@ module.exports = appSdk => {
                   }
                 }
               }
-              res.send(response)
+              respondSuccess()
             })()
           } else {
-            return res.send(response)
+            return respondSuccess()
           }
         }
       }
     }
 
     // response with no error nor discount applied
-    res.send(response)
+    respondSuccess()
   }
 }
