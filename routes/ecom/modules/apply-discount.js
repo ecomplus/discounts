@@ -173,7 +173,9 @@ module.exports = appSdk => {
             }
           }
         }
+        return true
       }
+      return false
     }
 
     if (params.items && params.items.length) {
@@ -322,59 +324,60 @@ module.exports = appSdk => {
           }
 
           // we have a discount to apply \o/
-          addDiscount(discountRule.discount, discountMatchEnum)
-          // add discount label and description if any
-          response.discount_rule.label = discountRule.label || params.discount_coupon ||
-            `DISCOUNT ${discountMatchEnum}`
-          if (discountRule.description) {
-            response.discount_rule.description = discountRule.description
-          }
+          if (addDiscount(discountRule.discount, discountMatchEnum)) {
+            // add discount label and description if any
+            response.discount_rule.label = discountRule.label || params.discount_coupon ||
+              `DISCOUNT ${discountMatchEnum}`
+            if (discountRule.description) {
+              response.discount_rule.description = discountRule.description
+            }
 
-          const { customer } = params
-          if (
-            customer && customer._id &&
-            (discountRule.usage_limit > 0 || discountRule.total_usage_limit > 0)
-          ) {
-            // list orders to check discount usage limits
-            return (async function () {
-              const url = `/orders.json?fields=_id&extra_discount.app.label=${label}`
-              const usageLimits = [{
-                // limit by customer
-                query: `&buyers._id=${customer._id}`,
-                max: discountRule.usage_limit
-              }, {
-                // total limit
-                query: '',
-                max: discountRule.total_usage_limit
-              }]
+            const { customer } = params
+            if (
+              customer && customer._id &&
+              (discountRule.usage_limit > 0 || discountRule.total_usage_limit > 0)
+            ) {
+              // list orders to check discount usage limits
+              return (async function () {
+                const url = `/orders.json?fields=_id&extra_discount.app.label=${label}`
+                const usageLimits = [{
+                  // limit by customer
+                  query: `&buyers._id=${customer._id}`,
+                  max: discountRule.usage_limit
+                }, {
+                  // total limit
+                  query: '',
+                  max: discountRule.total_usage_limit
+                }]
 
-              for (let i = 0; i < usageLimits.length; i++) {
-                const { query, max } = usageLimits[i]
-                if (max) {
-                  let countOrders
-                  try {
-                    // send Store API request to list orders with filters
-                    const { response } = await appSdk.apiRequest(storeId, `${url}${query}`)
-                    countOrders = response.data.result.length
-                  } catch (e) {
-                    countOrders = max
-                  }
+                for (let i = 0; i < usageLimits.length; i++) {
+                  const { query, max } = usageLimits[i]
+                  if (max) {
+                    let countOrders
+                    try {
+                      // send Store API request to list orders with filters
+                      const { response } = await appSdk.apiRequest(storeId, `${url}${query}`)
+                      countOrders = response.data.result.length
+                    } catch (e) {
+                      countOrders = max
+                    }
 
-                  if (countOrders >= max) {
-                    // limit reached
-                    return res.send({
-                      ...response,
-                      invalid_coupon_message: params.lang === 'pt_br'
-                        ? 'A promoção não pôde ser aplicada porque já atingiu o limite de usos'
-                        : 'The promotion could not be applied because it has already reached the usage limit'
-                    })
+                    if (countOrders >= max) {
+                      // limit reached
+                      return res.send({
+                        ...response,
+                        invalid_coupon_message: params.lang === 'pt_br'
+                          ? 'A promoção não pôde ser aplicada porque já atingiu o limite de usos'
+                          : 'The promotion could not be applied because it has already reached the usage limit'
+                      })
+                    }
                   }
                 }
-              }
-              respondSuccess()
-            })()
-          } else {
-            return respondSuccess()
+                respondSuccess()
+              })()
+            } else {
+              return respondSuccess()
+            }
           }
         }
       }
