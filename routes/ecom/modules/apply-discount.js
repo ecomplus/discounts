@@ -157,18 +157,20 @@ module.exports = appSdk => {
         }
       }
 
-      if (response.discount_rule) {
-        // accumulate discount
-        const extraDiscount = response.discount_rule.extra_discount
-        extraDiscount.value += value
-        if (extraDiscount.flags.length < 20) {
-          extraDiscount.flags.push(flag)
-        }
-      } else {
-        response.discount_rule = {
-          extra_discount: {
-            value,
-            flags: [flag]
+      if (value) {
+        if (response.discount_rule) {
+          // accumulate discount
+          const extraDiscount = response.discount_rule.extra_discount
+          extraDiscount.value += value
+          if (extraDiscount.flags.length < 20) {
+            extraDiscount.flags.push(flag)
+          }
+        } else {
+          response.discount_rule = {
+            extra_discount: {
+              value,
+              flags: [flag]
+            }
           }
         }
       }
