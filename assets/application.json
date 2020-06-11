@@ -3,7 +3,7 @@
   "state": "active",
   "title": "Campanhas e descontos",
   "slug": "discounts",
-  "version": "1.6.4",
+  "version": "1.6.8",
   "type": "external",
   "authentication": true,
   "auth_callback_uri": "https://discounts.ecomplus.biz/ecom/auth-callback",
@@ -181,6 +181,12 @@
           ],
           "additionalProperties": false,
           "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 100,
+              "title": "Rótulo",
+              "description": "Título (opcional) da promoção"
+            },
             "date_range": {
               "type": "object",
               "title": "Período de validade",
@@ -285,12 +291,18 @@
         "type": "array",
         "items": {
           "type": "object",
-          "title": "Desconto por kit",
+          "title": "Regra para disponibilizar brindes",
           "required": [
             "product_ids"
           ],
           "additionalProperties": false,
           "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 100,
+              "title": "Rótulo",
+              "description": "Título (opcional) da promoção"
+            },
             "date_range": {
               "type": "object",
               "title": "Período de validade",
