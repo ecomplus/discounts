@@ -142,7 +142,7 @@ module.exports = appSdk => {
       res.send(response)
     }
 
-    const addDiscount = (discount, flag) => {
+    const addDiscount = (discount, flag, label) => {
       let value
       const maxDiscount = params.amount[discount.apply_at || 'total']
       if (maxDiscount) {
@@ -167,6 +167,7 @@ module.exports = appSdk => {
           }
         } else {
           response.discount_rule = {
+            label: label || flag,
             extra_discount: {
               value,
               flags: [flag]
@@ -214,7 +215,7 @@ module.exports = appSdk => {
               }
             }
             // apply cumulative discount \o/
-            addDiscount(kitDiscount.discount, `KIT-${(index + 1)}`)
+            addDiscount(kitDiscount.discount, `KIT-${(index + 1)}`, kitDiscount.label)
           }
         }
       })
@@ -256,10 +257,14 @@ module.exports = appSdk => {
             // provide freebie products \o/
             response.freebie_product_ids = bestRule.product_ids
             if (discountValue) {
-              addDiscount({
-                type: 'fixed',
-                value: discountValue
-              }, 'FREEBIES')
+              addDiscount(
+                {
+                  type: 'fixed',
+                  value: discountValue
+                },
+                'FREEBIES',
+                bestRule.label
+              )
             }
           }
         }
