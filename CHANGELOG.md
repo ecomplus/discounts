@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/ecomplus/discounts/compare/v1.6.8...v1.7.0) (2020-08-19)
+
+
+### Features
+
+* **kit-subtotal-discount:** handle 'discount_kit_subtotal' option ([14382ff](https://github.com/ecomplus/discounts/commit/14382ffa100abddf4a453d3cbf91ca0e0758d0a9))
+
 ### [1.6.8](https://github.com/ecomplus/discounts/compare/v1.6.7...v1.6.8) (2020-06-11)
 
 
