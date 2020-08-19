@@ -24,19 +24,29 @@ const getValidDiscountRules = (discountRules, items) => {
         return false
       }
 
-      if (Array.isArray(rule.product_ids) && rule.discount_lowest_price && Array.isArray(items)) {
+      if (Array.isArray(rule.product_ids) && Array.isArray(items)) {
         // set/add discount value from lowest item price
         let value
-        items.forEach(item => {
-          const price = ecomUtils.price(item)
-          if (
-            price > 0 &&
-            rule.product_ids.indexOf(item.product_id) > -1 &&
-            (!value || value > price)
-          ) {
-            value = price
-          }
-        })
+        if (rule.discount_lowest_price) {
+          items.forEach(item => {
+            const price = ecomUtils.price(item)
+            if (
+              price > 0 &&
+              rule.product_ids.indexOf(item.product_id) > -1 &&
+              (!value || value > price)
+            ) {
+              value = price
+            }
+          })
+        } else if (rule.discount_kit_subtotal) {
+          value = 0
+          items.forEach(item => {
+            const price = ecomUtils.price(item)
+            if (price > 0 && rule.product_ids.indexOf(item.product_id) > -1) {
+              value += price * item.quantity
+            }
+          })
+        }
         if (value) {
           if (rule.discount && rule.discount.value) {
             if (rule.discount.type === 'percentage') {

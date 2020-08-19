@@ -234,6 +234,11 @@
               "title": "Descontar menor preço",
               "description": "Aplicar desconto com valor igual ao menor preço entre os produtos selecionados"
             },
+            "discount_kit_subtotal": {
+              "type": "boolean",
+              "title": "Descontar subtotal do kit",
+              "description": "Aplicar desconto em função do subtotal somando apenas os produtos do kit"
+            },
             "discount": {
               "title": "Desconto predefinido",
               "type": "object",
