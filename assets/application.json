@@ -128,6 +128,16 @@
                   "title": "Valor mínimo",
                   "description": "Montante mínimo para aplicar o desconto"
                 },
+                "amount_field": {
+                  "type": "string",
+                  "enum": [
+                    "total",
+                    "subtotal"
+                  ],
+                  "default": "total",
+                  "title": "Montante a validar",
+                  "description": "Checar valor mínimo no total ou subtotal do carrinho"
+                },
                 "type": {
                   "type": "string",
                   "enum": [

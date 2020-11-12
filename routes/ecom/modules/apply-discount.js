@@ -322,7 +322,7 @@ module.exports = appSdk => {
         // https://apx-mods.e-com.plus/api/v1/apply_discount/schema.json?store_id=100
         if (
           params.amount && params.amount.total > 0 &&
-          !(discountRule.discount.min_amount > params.amount.total)
+          !(discountRule.discount.min_amount > params.amount[discountRule.discount.amount_field || 'total'])
         ) {
           if (
             discountRule.cumulative_discount === false &&
