@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://github.com/ecomplus/discounts/compare/v1.7.0...v1.8.0) (2020-11-12)
+
+
+### Features
+
+* **discount-rules:** add 'amount_field' option to select min ref ([#12](https://github.com/ecomplus/discounts/issues/12)) ([64daf0f](https://github.com/ecomplus/discounts/commit/64daf0f7c9f23636ec827b48bb51342966facc75))
+* **kit-discounts:** add filter by customer ids (as rules) ([#10](https://github.com/ecomplus/discounts/issues/10)) ([619a654](https://github.com/ecomplus/discounts/commit/619a654c41f67a08e0587ae6fccb7cb918633aa2))
+
 ## [1.7.0](https://github.com/ecomplus/discounts/compare/v1.6.8...v1.7.0) (2020-08-19)
 
 
