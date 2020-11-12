@@ -16,11 +16,20 @@ const checkDateRange = rule => {
   return true
 }
 
-const getValidDiscountRules = (discountRules, items) => {
+const getValidDiscountRules = (discountRules, params, items) => {
   if (Array.isArray(discountRules) && discountRules.length) {
     // validate rules objects
     return discountRules.filter(rule => {
       if (!rule) {
+        return false
+      }
+
+      if (
+        Array.isArray(rule.customer_ids) &&
+        rule.customer_ids.length &&
+        rule.customer_ids.indexOf(params.customer && params.customer._id) === -1
+      ) {
+        // unavailable for current customer
         return false
       }
 
@@ -191,7 +200,7 @@ module.exports = appSdk => {
 
     if (params.items && params.items.length) {
       // try product kit discounts first
-      const kitDiscounts = getValidDiscountRules(config.product_kit_discounts, params.items)
+      const kitDiscounts = getValidDiscountRules(config.product_kit_discounts, params, params.items)
       kitDiscounts.forEach((kitDiscount, index) => {
         if (kitDiscount) {
           const productIds = Array.isArray(kitDiscount.product_ids)
@@ -281,7 +290,7 @@ module.exports = appSdk => {
       }
     }
 
-    const discountRules = getValidDiscountRules(config.discount_rules)
+    const discountRules = getValidDiscountRules(config.discount_rules, params)
     if (discountRules.length) {
       const { discountRule, discountMatchEnum } = matchDiscountRule(discountRules, params)
       if (discountRule) {

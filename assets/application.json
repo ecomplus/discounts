@@ -249,6 +249,16 @@
               "title": "Descontar subtotal do kit",
               "description": "Aplicar desconto em função do subtotal somando apenas os produtos do kit"
             },
+            "customer_ids": {
+              "title": "Lista de clientes selecionados",
+              "description": "Se preenchido, o desconto será disponibilizado apenas para estes clientes",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{24}$",
+                "title": "ID do cliente"
+              }
+            },
             "discount": {
               "title": "Desconto predefinido",
               "type": "object",
