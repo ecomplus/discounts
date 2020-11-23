@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.1](https://github.com/ecomplus/discounts/compare/v1.8.0...v1.8.1) (2020-11-23)
+
+
+### Bug Fixes
+
+* **kit-discount:** prevent applying duplicated discount for same items ([da86774](https://github.com/ecomplus/discounts/commit/da86774c94827c9e0e58328aa0462b1e8cf8bf47))
+
 ## [1.8.0](https://github.com/ecomplus/discounts/compare/v1.7.0...v1.8.0) (2020-11-12)
 
 
