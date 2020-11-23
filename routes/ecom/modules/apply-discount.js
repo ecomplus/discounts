@@ -201,14 +201,21 @@ module.exports = appSdk => {
     if (params.items && params.items.length) {
       // try product kit discounts first
       const kitDiscounts = getValidDiscountRules(config.product_kit_discounts, params, params.items)
+        .sort((a, b) => {
+          return b.min_quantity - a.min_quantity
+        })
+      // prevent applying duplicated kit discount for same items
+      let discountedItemIds = []
+
       kitDiscounts.forEach((kitDiscount, index) => {
         if (kitDiscount) {
           const productIds = Array.isArray(kitDiscount.product_ids)
             ? kitDiscount.product_ids
             : []
-          const kitItems = productIds.length
+          let kitItems = productIds.length
             ? params.items.filter(item => item.quantity && productIds.indexOf(item.product_id) > -1)
             : params.items
+          kitItems = kitItems.filter(item => discountedItemIds.indexOf(item._id) === -1)
           if (kitDiscount.min_quantity > 0) {
             // check total items quantity
             let totalQuantity = 0
@@ -235,6 +242,7 @@ module.exports = appSdk => {
             }
             // apply cumulative discount \o/
             addDiscount(kitDiscount.discount, `KIT-${(index + 1)}`, kitDiscount.label)
+            discountedItemIds = discountedItemIds.concat(kitItems.map(item => item._id))
           }
         }
       })
