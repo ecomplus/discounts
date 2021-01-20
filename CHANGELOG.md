@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.2](https://github.com/ecomplus/discounts/compare/v1.8.1...v1.8.2) (2021-01-20)
+
+
+### Bug Fixes
+
+* **apply-discount:** ensure discount rule not sent with invalid coupon message ([#15](https://github.com/ecomplus/discounts/issues/15)) ([d8a2f64](https://github.com/ecomplus/discounts/commit/d8a2f649c7675bcd3f1879bdcce226261e924b82))
+
 ### [1.8.1](https://github.com/ecomplus/discounts/compare/v1.8.0...v1.8.1) (2020-11-23)
 
 
