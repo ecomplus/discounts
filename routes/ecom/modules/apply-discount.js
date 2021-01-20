@@ -316,7 +316,7 @@ module.exports = appSdk => {
           }
           if (!hasProductMatch) {
             return res.send({
-              ...response,
+              available_extra_discount: response.available_extra_discount,
               invalid_coupon_message: params.lang === 'pt_br'
                 ? 'Nenhum produto da promoção está incluído no carrinho'
                 : 'No promotion products are included in the cart'
@@ -324,10 +324,15 @@ module.exports = appSdk => {
           }
         }
 
-        const { label, discount } = discountRule
+        let { label, discount } = discountRule
+        if (typeof label !== 'string' || !label) {
+          label = params.discount_coupon || `DISCOUNT ${discountMatchEnum}`
+        }
         if (discount.apply_at !== 'freight') {
           // show current discount rule as available discount to apply
-          response.available_extra_discount = { label }
+          response.available_extra_discount = {
+            label: label.substring(0, 50)
+          }
           ;['min_amount', 'type', 'value'].forEach(field => {
             if (discount[field]) {
               response.available_extra_discount[field] = discount[field]
@@ -348,7 +353,6 @@ module.exports = appSdk => {
             // explain discount can't be applied :(
             // https://apx-mods.e-com.plus/api/v1/apply_discount/response_schema.json?store_id=100
             return res.send({
-              ...response,
               invalid_coupon_message: params.lang === 'pt_br'
                 ? 'A promoção não pôde ser aplicada porque este desconto não é cumulativo'
                 : 'This discount is not cumulative'
@@ -358,8 +362,7 @@ module.exports = appSdk => {
           // we have a discount to apply \o/
           if (addDiscount(discountRule.discount, discountMatchEnum)) {
             // add discount label and description if any
-            response.discount_rule.label = discountRule.label || params.discount_coupon ||
-              `DISCOUNT ${discountMatchEnum}`
+            response.discount_rule.label = label
             if (discountRule.description) {
               response.discount_rule.description = discountRule.description
             }
@@ -397,7 +400,6 @@ module.exports = appSdk => {
                     if (countOrders >= max) {
                       // limit reached
                       return res.send({
-                        ...response,
                         invalid_coupon_message: params.lang === 'pt_br'
                           ? 'A promoção não pôde ser aplicada porque já atingiu o limite de usos'
                           : 'The promotion could not be applied because it has already reached the usage limit'
