@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.3](https://github.com/ecomplus/discounts/compare/v1.8.2...v1.8.3) (2021-04-05)
+
+
+### Bug Fixes
+
+* **apply-discount:** must encode `label` as uri param to check usage limits ([#17](https://github.com/ecomplus/discounts/issues/17)) ([521ccc5](https://github.com/ecomplus/discounts/commit/521ccc5bd71729690885521cff7014dca75065ad))
+
 ### [1.8.2](https://github.com/ecomplus/discounts/compare/v1.8.1...v1.8.2) (2021-01-20)
 
 
