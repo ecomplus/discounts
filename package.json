@@ -12,7 +12,7 @@
     "publish:market": "node ./scripts/market-publication.js"
   },
   "dependencies": {
-    "@ecomplus/application-sdk": "^11.0.0-sqlite.1.13.0",
+    "@ecomplus/application-sdk": "^11.0.0-sqlite.1.14.8",
     "@ecomplus/utils": "^1.4.1",
     "console-files": "2.x",
     "express": "4.x"
