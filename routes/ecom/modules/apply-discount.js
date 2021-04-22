@@ -202,7 +202,16 @@ module.exports = appSdk => {
       // try product kit discounts first
       const kitDiscounts = getValidDiscountRules(config.product_kit_discounts, params, params.items)
         .sort((a, b) => {
-          return b.min_quantity - a.min_quantity
+          if (a.min_quantity > b.min_quantity) {
+            return -1
+          } else if (b.min_quantity > a.min_quantity) {
+            return 1
+          } else if (a.discount.min_amount > b.discount.min_amount) {
+            return -1
+          } else if (b.discount.min_amount > a.discount.min_amount) {
+            return 1
+          }
+          return 0
         })
       // prevent applying duplicated kit discount for same items
       let discountedItemIds = []
