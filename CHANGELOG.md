@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.4](https://github.com/ecomplus/discounts/compare/v1.8.3...v1.8.4) (2021-04-22)
+
+
+### Bug Fixes
+
+* **apply-discount:** sort kit discounts by min amount after min quantity ([3076e67](https://github.com/ecomplus/discounts/commit/3076e67dbd0f105e2f6ab48d16ab94b823942a86))
+
 ### [1.8.3](https://github.com/ecomplus/discounts/compare/v1.8.2...v1.8.3) (2021-04-05)
 
 
