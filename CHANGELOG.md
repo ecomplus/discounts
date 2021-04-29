@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.9.0](https://github.com/ecomplus/discounts/compare/v1.8.4...v1.9.0) (2021-04-29)
+
+
+### Features
+
+* **apply-discount:** better choosing default `available_extra_discount` ([bf6e3cc](https://github.com/ecomplus/discounts/commit/bf6e3ccef41c06a208d121ae7dc83d0a98a841e8))
+* **freebies:** optionally specify client ids for freebie items ([#14](https://github.com/ecomplus/discounts/issues/14)) ([da58733](https://github.com/ecomplus/discounts/commit/da5873353fa09875219ca8b3ef4d1340c8a49221))
+
 ### [1.8.4](https://github.com/ecomplus/discounts/compare/v1.8.3...v1.8.4) (2021-04-22)
 
 
