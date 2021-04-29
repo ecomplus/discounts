@@ -2,7 +2,7 @@
 
 const ecomUtils = require('@ecomplus/utils')
 
-const checkDateRange = rule => {
+const validateDateRange = rule => {
   // filter campaings by date
   const timestamp = Date.now()
   if (rule.date_range) {
@@ -16,20 +16,28 @@ const checkDateRange = rule => {
   return true
 }
 
+const validateCustomerId = (rule, params) => {
+  if (
+    Array.isArray(rule.customer_ids) &&
+    rule.customer_ids.length &&
+    rule.customer_ids.indexOf(params.customer && params.customer._id) === -1
+  ) {
+    // unavailable for current customer
+    return false
+  }
+  return true
+}
+
+const checkOpenPromotion = rule => {
+  return !rule.discount_coupon && !rule.utm_campaign &&
+    (!Array.isArray(rule.customer_ids) || !rule.customer_ids.length)
+}
+
 const getValidDiscountRules = (discountRules, params, items) => {
   if (Array.isArray(discountRules) && discountRules.length) {
     // validate rules objects
     return discountRules.filter(rule => {
-      if (!rule) {
-        return false
-      }
-
-      if (
-        Array.isArray(rule.customer_ids) &&
-        rule.customer_ids.length &&
-        rule.customer_ids.indexOf(params.customer && params.customer._id) === -1
-      ) {
-        // unavailable for current customer
+      if (!rule || !validateCustomerId(rule, params)) {
         return false
       }
 
@@ -75,7 +83,7 @@ const getValidDiscountRules = (discountRules, params, items) => {
         return false
       }
 
-      return checkDateRange(rule)
+      return validateDateRange(rule)
     })
   }
 
@@ -128,10 +136,7 @@ const matchDiscountRule = (discountRules, params) => {
 
   // last try to match by open promotions
   return {
-    discountRule: discountRules.find(rule => {
-      return !rule.discount_coupon && !rule.utm_campaign &&
-        (!Array.isArray(rule.customer_ids) || !rule.customer_ids.length)
-    }),
+    discountRule: discountRules.find(checkOpenPromotion),
     discountMatchEnum: 'OPEN'
   }
 }
@@ -259,7 +264,10 @@ module.exports = appSdk => {
       // gift products (freebies) campaings
       if (Array.isArray(config.freebies_rules)) {
         const validFreebiesRules = config.freebies_rules.filter(rule => {
-          return checkDateRange(rule) && Array.isArray(rule.product_ids) && rule.product_ids.length
+          return validateDateRange(rule) &&
+            validateCustomerId(rule, params) &&
+            Array.isArray(rule.product_ids) &&
+            rule.product_ids.length
         })
         if (validFreebiesRules) {
           let subtotal = 0
@@ -340,7 +348,7 @@ module.exports = appSdk => {
         if (
           discount.apply_at !== 'freight' &&
           (!response.available_extra_discount || !response.available_extra_discount.value ||
-            discountRule.default_discount === true || (!discountRule.discount_coupon && !discountRule.utm_campaign))
+            discountRule.default_discount === true || checkOpenPromotion(discountRule))
         ) {
           // show current discount rule as available discount to apply
           response.available_extra_discount = {

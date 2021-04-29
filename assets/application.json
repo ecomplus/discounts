@@ -362,6 +362,16 @@
               "maximum": 999999999,
               "title": "Valor mínimo",
               "description": "Subtotal mínimo para disponibilizar o brinde"
+            },
+            "customer_ids": {
+              "title": "Lista de clientes selecionados",
+              "description": "Se preenchido, os brindes serão disponibilizados apenas para estes clientes",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{24}$",
+                "title": "ID do cliente"
+              }
             }
           }
         }
