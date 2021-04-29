@@ -337,7 +337,11 @@ module.exports = appSdk => {
         if (typeof label !== 'string' || !label) {
           label = params.discount_coupon || `DISCOUNT ${discountMatchEnum}`
         }
-        if (discount.apply_at !== 'freight') {
+        if (
+          discount.apply_at !== 'freight' &&
+          (!response.available_extra_discount ||
+            discountRule.default_discount || (!discountRule.discount_coupon && !discountRule.utm_campaign))
+        ) {
           // show current discount rule as available discount to apply
           response.available_extra_discount = {
             label: label.substring(0, 50)
