@@ -339,8 +339,8 @@ module.exports = appSdk => {
         }
         if (
           discount.apply_at !== 'freight' &&
-          (!response.available_extra_discount ||
-            discountRule.default_discount || (!discountRule.discount_coupon && !discountRule.utm_campaign))
+          (!response.available_extra_discount || !response.available_extra_discount.value ||
+            discountRule.default_discount === true || (!discountRule.discount_coupon && !discountRule.utm_campaign))
         ) {
           // show current discount rule as available discount to apply
           response.available_extra_discount = {
