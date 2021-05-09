@@ -14,7 +14,8 @@
   },
   "modules": {
     "apply_discount": {
-      "endpoint": "https://discounts.ecomplus.biz/ecom/modules/apply-discount"
+      "endpoint": "https://discounts.ecomplus.biz/ecom/modules/apply-discount",
+      "enabled": true
     }
   },
   "admin_settings": {
