@@ -205,6 +205,15 @@ module.exports = appSdk => {
 
     if (params.items && params.items.length) {
       // try product kit discounts first
+      if (Array.isArray(config.product_kit_discounts)) {
+        config.product_kit_discounts = config.product_kit_discounts.map(kitDiscount => {
+          if (!kitDiscount.product_ids) {
+            // kit with any items
+            kitDiscount.product_ids = params.items
+          }
+          return kitDiscount
+        })
+      }
       const kitDiscounts = getValidDiscountRules(config.product_kit_discounts, params, params.items)
         .sort((a, b) => {
           if (a.min_quantity > b.min_quantity) {
