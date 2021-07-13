@@ -209,7 +209,7 @@ module.exports = appSdk => {
         config.product_kit_discounts = config.product_kit_discounts.map(kitDiscount => {
           if (!kitDiscount.product_ids) {
             // kit with any items
-            kitDiscount.product_ids = params.items
+            kitDiscount.product_ids = []
           }
           return kitDiscount
         })
