@@ -42,16 +42,15 @@ const getValidDiscountRules = (discountRules, params, items) => {
       }
 
       if (Array.isArray(rule.product_ids) && Array.isArray(items)) {
+        const checkProductId = item => {
+          return (!rule.product_ids.length || rule.product_ids.indexOf(item.product_id) > -1)
+        }
         // set/add discount value from lowest item price
         let value
         if (rule.discount_lowest_price) {
           items.forEach(item => {
             const price = ecomUtils.price(item)
-            if (
-              price > 0 &&
-              rule.product_ids.indexOf(item.product_id) > -1 &&
-              (!value || value > price)
-            ) {
+            if (price > 0 && checkProductId(item) && (!value || value > price)) {
               value = price
             }
           })
@@ -59,7 +58,7 @@ const getValidDiscountRules = (discountRules, params, items) => {
           value = 0
           items.forEach(item => {
             const price = ecomUtils.price(item)
-            if (price > 0 && rule.product_ids.indexOf(item.product_id) > -1) {
+            if (price > 0 && checkProductId(item)) {
               value += price * item.quantity
             }
           })
