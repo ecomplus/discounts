@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.9.3](https://github.com/ecomplus/discounts/compare/v1.9.2...v1.9.3) (2021-07-13)
+
+
+### Bug Fixes
+
+* **apply-discount:** properly checking kit items for lowest price and kit subtotal handlers ([097ebcf](https://github.com/ecomplus/discounts/commit/097ebcf2756f36f03c0e138be6c6b34d3ce6463e))
+
 ### [1.9.2](https://github.com/ecomplus/discounts/compare/v1.9.1...v1.9.2) (2021-07-13)
 
 
