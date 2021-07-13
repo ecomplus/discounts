@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.9.2](https://github.com/ecomplus/discounts/compare/v1.9.1...v1.9.2) (2021-07-13)
+
+
+### Bug Fixes
+
+* **apply-discount:** fallback kit discount `product_ids` as empty array ([ca8ee7b](https://github.com/ecomplus/discounts/commit/ca8ee7bce753de5cc649e098c4f55ab0e8c0bc95))
+
 ### [1.9.1](https://github.com/ecomplus/discounts/compare/v1.9.0...v1.9.1) (2021-07-13)
 
 
