@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.9.1](https://github.com/ecomplus/discounts/compare/v1.9.0...v1.9.1) (2021-07-13)
+
+
+### Bug Fixes
+
+* **application:** must set requierd `modules.apply_discount.enabled` ([a9f9f02](https://github.com/ecomplus/discounts/commit/a9f9f02767b3b2cc0c11617ba16352b3b7d87eec))
+* **apply-discount:** fix checking less price discount for kits with any items ([47c4f8f](https://github.com/ecomplus/discounts/commit/47c4f8f631881dfe9c75aa4ce99c1397822826f7))
+
 ## [1.9.0](https://github.com/ecomplus/discounts/compare/v1.8.4...v1.9.0) (2021-04-29)
 
 
