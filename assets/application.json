@@ -22,7 +22,7 @@
     "discount_rules": {
       "schema": {
         "title": "Regras de desconto",
-        "description": "Aplicar descontos com filtros por cupom, campanha UTM e/ou cliente. Para importação em massa, verifique a tabela https://docs.google.com/spreadsheets/d/1fCU3TzUO45s7vixohEZ_3oizrSDfTAIP4nnH52jpVv4/edit?usp=sharing",
+        "description": "Aplicar descontos com filtros por cupom, campanha UTM e/ou cliente. Para importação em massa, verifique a tabela https://bit.ly/3zRvONd",
         "type": "array",
         "items": {
           "type": "object",
