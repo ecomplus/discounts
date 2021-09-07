@@ -182,7 +182,7 @@
     "product_kit_discounts": {
       "schema": {
         "title": "Descontos \"compre junto\"",
-        "description": "Aplicar descontos por quantidade ou kits de produto(s)",
+        "description": "Aplicar descontos por quantidade ou kits de produto(s). Para importação em massa, verifique a tabela https://docs.google.com/spreadsheets/d/1y33ngSnirlvxojT0zPc38mTroe181Q89ruuqrXy6ssU/edit?usp=sharing",
         "type": "array",
         "items": {
           "type": "object",
