@@ -383,6 +383,16 @@
                 "pattern": "^[a-f0-9]{24}$",
                 "title": "ID do cliente"
               }
+            },
+            "check_product_ids": {
+              "title": "Lista de produtos da campanha",
+              "description": "Se preenchido, o brinde só será aplicado se um dos produtos estiver no carrinho",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{24}$",
+                "title": "ID do produto"
+              }
             }
           }
         }
