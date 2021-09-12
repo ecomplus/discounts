@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.0](https://github.com/ecomplus/discounts/compare/v1.9.4...v1.10.0) (2021-09-12)
+
+
+### Features
+
+* **excluded-products:** handle new `excluded_product_ids` config options for discount rules [[#11](https://github.com/ecomplus/discounts/issues/11)] ([3334ef6](https://github.com/ecomplus/discounts/commit/3334ef6493ea777b04264c3864e3bd1c2cd52e96))
+* **freebies-rules:** handle new `check_product_ids` config option for freebies [[#18](https://github.com/ecomplus/discounts/issues/18)] ([7a17c63](https://github.com/ecomplus/discounts/commit/7a17c6323ac61c54f649ba708820c5846403065a))
+
 ### [1.9.4](https://github.com/ecomplus/discounts/compare/v1.9.3...v1.9.4) (2021-09-06)
 
 ### [1.9.3](https://github.com/ecomplus/discounts/compare/v1.9.2...v1.9.3) (2021-07-13)
