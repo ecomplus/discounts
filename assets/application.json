@@ -168,6 +168,16 @@
                 "title": "ID do produto"
               }
             },
+            "excluded_product_ids": {
+              "title": "Produtos excluídos",
+              "description": "Se preenchido, o desconto será inválido se um dos produtos estiver no carrinho",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{24}$",
+                "title": "ID do produto"
+              }
+            },
             "cumulative_discount": {
               "type": "boolean",
               "default": true,

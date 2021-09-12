@@ -349,6 +349,22 @@ module.exports = appSdk => {
           }
         }
 
+        const excludedProducts = discountRule.excluded_product_ids
+        if (Array.isArray(excludedProducts) && excludedProducts.length && params.items) {
+          // must check any excluded product is on cart
+          for (let i = 0; i < params.items.length; i++) {
+            const item = params.items[i]
+            if (item.quantity && excludedProducts.includes(item.product_id)) {
+              return res.send({
+                available_extra_discount: response.available_extra_discount,
+                invalid_coupon_message: params.lang === 'pt_br'
+                  ? `Promoção é inválida para o produto ${item.name}`
+                  : `Invalid promotion for product ${item.name}`
+              })
+            }
+          }
+        }
+
         let { label, discount } = discountRule
         if (typeof label !== 'string' || !label) {
           label = params.discount_coupon || `DISCOUNT ${discountMatchEnum}`
