@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.1](https://github.com/ecomplus/discounts/compare/v1.10.0...v1.10.1) (2021-10-21)
+
+
+### Bug Fixes
+
+* **deps:** update @ecomplus/application-sdk to v1.15.5 firestore ([fa7d1fc](https://github.com/ecomplus/discounts/commit/fa7d1fc5cec9252c6df98b9d11df9c5bc6e9b761))
+
 ## [1.10.0](https://github.com/ecomplus/discounts/compare/v1.9.4...v1.10.0) (2021-09-12)
 
 
