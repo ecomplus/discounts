@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.2](https://github.com/ecomplus/discounts/compare/v1.10.1...v1.10.2) (2021-11-19)
+
+
+### Bug Fixes
+
+* **apply-discount:** check label with regex (i) for case insensitive discounts coupons usage limit ([017404c](https://github.com/ecomplus/discounts/commit/017404c544d0a02bfa1bf5a2319e40ee811982bf))
+
 ### [1.10.1](https://github.com/ecomplus/discounts/compare/v1.10.0...v1.10.1) (2021-10-21)
 
 
