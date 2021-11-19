@@ -278,7 +278,9 @@ module.exports = appSdk => {
             ) {
               // list orders to check discount usage limits
               return (async function () {
-                const url = `/orders.json?fields=_id&extra_discount.app.label=${encodeURIComponent(label)}`
+                const url = '/orders.json?fields=_id' +
+                  `&extra_discount.app.label${(discountRule.case_insensitive ? '%=' : '=')}` +
+                  encodeURIComponent(label)
                 const usageLimits = [{
                   // limit by customer
                   query: `&buyers._id=${customer._id}`,
