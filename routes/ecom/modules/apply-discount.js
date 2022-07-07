@@ -135,7 +135,7 @@ module.exports = appSdk => {
             }
             // apply cumulative discount \o/
             addDiscount(kitDiscount.discount, `KIT-${(index + 1)}`, kitDiscount.label)
-            discountedItemIds = discountedItemIds.concat(kitItems.map(item => item._id))
+            discountedItemIds = discountedItemIds.concat(kitItems.map(item => item.product_id))
           }
         }
       })
