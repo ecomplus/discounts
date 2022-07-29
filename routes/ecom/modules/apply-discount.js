@@ -175,6 +175,7 @@ module.exports = appSdk => {
               } else if (subtotal >= rule.min_subtotal) {
                 // discount not applicable yet but additional freebies are available
                 bestRule = rule
+                discountValue = 0
               }
             }
           }
