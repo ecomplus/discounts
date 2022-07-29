@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.5](https://github.com/ecomplus/discounts/compare/v1.10.4...v1.10.5) (2022-07-29)
+
+
+### Bug Fixes
+
+* **freebies:** return available freebie even wiuthout applying discount due to min subtotal [[#27](https://github.com/ecomplus/discounts/issues/27)] ([25d3915](https://github.com/ecomplus/discounts/commit/25d3915c8a85968fecc68a67d324e92acfb4de48))
+
 ### [1.10.4](https://github.com/ecomplus/discounts/compare/v1.10.3...v1.10.4) (2022-07-07)
 
 
