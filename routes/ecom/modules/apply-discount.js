@@ -168,14 +168,13 @@ module.exports = appSdk => {
               }
             })
             const fixedSubtotal = subtotal - value
-            if ((!bestRule || value > discountValue || bestRule.min_subtotal < rule.min_subtotal)) {
+            if (!bestRule || value > discountValue || bestRule.min_subtotal < rule.min_subtotal) {
               if (!(rule.min_subtotal > fixedSubtotal)) {
                 bestRule = rule
                 discountValue = value
-              } else if (subtotal >= rule.min_subtotal) {
+              } else if (!discountValue && subtotal >= rule.min_subtotal) {
                 // discount not applicable yet but additional freebies are available
                 bestRule = rule
-                discountValue = 0
               }
             }
           }
