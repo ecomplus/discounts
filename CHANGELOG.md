@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.7](https://github.com/ecomplus/discounts/compare/v1.10.6...v1.10.7) (2022-07-29)
+
+
+### Bug Fixes
+
+* never override with freebies only (no discount) if other rule provides applicable discount ([c1a0853](https://github.com/ecomplus/discounts/commit/c1a08532abf203f109f571edaf6388c634e22957))
+
 ### [1.10.6](https://github.com/ecomplus/discounts/compare/v1.10.5...v1.10.6) (2022-07-29)
 
 
