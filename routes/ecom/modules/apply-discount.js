@@ -301,8 +301,11 @@ module.exports = appSdk => {
                       // send Store API request to list orders with filters
                       const { response } = await appSdk.apiRequest(storeId, `${url}${query}`)
                       countOrders = response.data.result.length
-                    } catch (e) {
-                      countOrders = max
+                    } catch (err) {
+                      return res.status(409).send({
+                        error: 'CANT_CHECK_USAGE_LIMITS',
+                        message: err.message
+                      })
                     }
 
                     if (countOrders >= max) {
