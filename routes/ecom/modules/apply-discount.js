@@ -101,6 +101,8 @@ module.exports = appSdk => {
         })
       // prevent applying duplicated kit discount for same items
       let discountedItemIds = []
+      // check buy together recommendations
+      const buyTogether = []
 
       kitDiscounts.forEach((kitDiscount, index) => {
         if (kitDiscount) {
@@ -111,6 +113,36 @@ module.exports = appSdk => {
             ? params.items.filter(item => item.quantity && productIds.indexOf(item.product_id) > -1)
             : params.items
           kitItems = kitItems.filter(item => discountedItemIds.indexOf(item._id) === -1)
+          const recommendBuyTogether = () => {
+            if (
+              params.items.length === 1 &&
+              productIds.length <= 4 &&
+              buyTogether.length < 300
+            ) {
+              const baseProductId = params.items[0].product_id
+              const baseItemQuantity = params.items[0].quantity || 1
+              const perItemQuantity = kitDiscount.min_quantity > 2
+                ? Math.max(kitDiscount.min_quantity / (productIds.length - 1) - baseItemQuantity, 1)
+                : 1
+              const buyTogetherProducts = {}
+              productIds.forEach((productId) => {
+                if (productId !== baseProductId) {
+                  buyTogetherProducts[productId] = perItemQuantity
+                }
+              })
+              if (Object.keys(buyTogetherProducts).length) {
+                buyTogether.push({
+                  products: buyTogetherProducts,
+                  discount: {
+                    type: kitDiscount.discount.type,
+                    value: kitDiscount.discount.value
+                  }
+                })
+              }
+            }
+          }
+
+          const discount = Object.assign({}, kitDiscount.discount)
           if (kitDiscount.min_quantity > 0) {
             // check total items quantity
             if (kitDiscount.same_product_quantity) {
@@ -121,21 +153,24 @@ module.exports = appSdk => {
                 totalQuantity += quantity
               })
               if (totalQuantity < kitDiscount.min_quantity) {
+                if (productIds.length > 1 && kitDiscount.check_all_items !== false) {
+                  return recommendBuyTogether()
+                }
                 return
               }
-              if (kitDiscount.discount.type === 'fixed' && kitDiscount.cumulative_discount !== false) {
-                kitDiscount.discount.value *= Math.floor(totalQuantity / kitDiscount.min_quantity)
+              if (discount.type === 'fixed' && kitDiscount.cumulative_discount !== false) {
+                discount.value *= Math.floor(totalQuantity / kitDiscount.min_quantity)
               }
             }
           }
 
-          if (!params.amount || !(kitDiscount.discount.min_amount > params.amount.total)) {
+          if (!params.amount || !(discount.min_amount > params.amount.total)) {
             if (kitDiscount.check_all_items !== false) {
               for (let i = 0; i < productIds.length; i++) {
                 const productId = productIds[i]
                 if (productId && !kitItems.find(item => item.quantity && item.product_id === productId)) {
                   // product not on current cart
-                  return
+                  return recommendBuyTogether()
                 }
               }
             }
@@ -143,19 +178,22 @@ module.exports = appSdk => {
             if (kitDiscount.same_product_quantity) {
               kitItems.forEach((item, i) => {
                 addDiscount(
-                  kitDiscount.discount,
+                  discount,
                   `KIT-${(index + 1)}-${i}`,
                   kitDiscount.label,
                   ecomUtils.price(item)
                 )
               })
             } else {
-              addDiscount(kitDiscount.discount, `KIT-${(index + 1)}`, kitDiscount.label)
+              addDiscount(discount, `KIT-${(index + 1)}`, kitDiscount.label)
             }
             discountedItemIds = discountedItemIds.concat(kitItems.map(item => item.product_id))
           }
         }
       })
+      if (buyTogether.length) {
+        response.buy_together = buyTogether
+      }
 
       // gift products (freebies) campaings
       if (Array.isArray(config.freebies_rules)) {
