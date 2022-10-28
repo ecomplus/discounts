@@ -244,6 +244,11 @@
               "minimum": 1,
               "maximum": 9999999
             },
+            "same_product_quantity": {
+              "type": "boolean",
+              "title": "Checar quantidade de cada item",
+              "description": "Aplicar desconto no produto apenas se a quantidade mínima for satisfeita no mesmo item do carrinho"
+            },
             "check_all_items": {
               "type": "boolean",
               "default": true,

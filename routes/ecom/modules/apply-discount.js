@@ -36,9 +36,11 @@ module.exports = appSdk => {
       res.send(response)
     }
 
-    const addDiscount = (discount, flag, label) => {
+    const addDiscount = (discount, flag, label, maxDiscount) => {
       let value
-      const maxDiscount = params.amount[discount.apply_at || 'total']
+      if (typeof maxDiscount !== 'number') {
+        maxDiscount = params.amount[discount.apply_at || 'total']
+      }
       if (maxDiscount) {
         // update amount discount and total
         if (discount.type === 'percentage') {
@@ -111,15 +113,19 @@ module.exports = appSdk => {
           kitItems = kitItems.filter(item => discountedItemIds.indexOf(item._id) === -1)
           if (kitDiscount.min_quantity > 0) {
             // check total items quantity
-            let totalQuantity = 0
-            kitItems.forEach(({ quantity }) => {
-              totalQuantity += quantity
-            })
-            if (totalQuantity < kitDiscount.min_quantity) {
-              return
-            }
-            if (kitDiscount.discount.type === 'fixed' && kitDiscount.cumulative_discount !== false) {
-              kitDiscount.discount.value *= Math.floor(totalQuantity / kitDiscount.min_quantity)
+            if (kitDiscount.same_product_quantity) {
+              kitItems = kitItems.filter(item => item.quantity >= kitDiscount.min_quantity)
+            } else {
+              let totalQuantity = 0
+              kitItems.forEach(({ quantity }) => {
+                totalQuantity += quantity
+              })
+              if (totalQuantity < kitDiscount.min_quantity) {
+                return
+              }
+              if (kitDiscount.discount.type === 'fixed' && kitDiscount.cumulative_discount !== false) {
+                kitDiscount.discount.value *= Math.floor(totalQuantity / kitDiscount.min_quantity)
+              }
             }
           }
 
@@ -134,7 +140,18 @@ module.exports = appSdk => {
               }
             }
             // apply cumulative discount \o/
-            addDiscount(kitDiscount.discount, `KIT-${(index + 1)}`, kitDiscount.label)
+            if (kitDiscount.same_product_quantity) {
+              kitItems.forEach((item, i) => {
+                addDiscount(
+                  kitDiscount.discount,
+                  `KIT-${(index + 1)}-${i}`,
+                  kitDiscount.label,
+                  ecomUtils.price(item)
+                )
+              })
+            } else {
+              addDiscount(kitDiscount.discount, `KIT-${(index + 1)}`, kitDiscount.label)
+            }
             discountedItemIds = discountedItemIds.concat(kitItems.map(item => item.product_id))
           }
         }
