@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.11.0](https://github.com/ecomplus/discounts/compare/v1.10.8...v1.11.0) (2022-10-28)
+
+
+### Features
+
+* Add `same_product_quantity` for progressive discounts ([aa3ac73](https://github.com/ecomplus/discounts/commit/aa3ac73e36b47f695008d1bdf4abe52aef2dca02))
+* try to recommend buy together options when cart has 1 product only ([5d9bedd](https://github.com/ecomplus/discounts/commit/5d9bedd91d846883eb67e5a0a194ab303aada126))
+
 ### [1.10.8](https://github.com/ecomplus/discounts/compare/v1.10.7...v1.10.8) (2022-09-02)
 
 ### [1.10.7](https://github.com/ecomplus/discounts/compare/v1.10.6...v1.10.7) (2022-07-29)
