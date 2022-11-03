@@ -120,6 +120,9 @@ module.exports = appSdk => {
               buyTogether.length < 300
             ) {
               const baseProductId = params.items[0].product_id
+              if (productIds.indexOf(baseProductId) === -1) {
+                return
+              }
               const baseItemQuantity = params.items[0].quantity || 1
               const perItemQuantity = kitDiscount.min_quantity > 2
                 ? Math.max(kitDiscount.min_quantity / (productIds.length - 1) - baseItemQuantity, 1)
