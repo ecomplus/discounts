@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.11.2](https://github.com/ecomplus/discounts/compare/v1.11.1...v1.11.2) (2022-11-04)
+
+
+### Bug Fixes
+
+* max discount for same product quantity is based on item quantity ([ac2210d](https://github.com/ecomplus/discounts/commit/ac2210d087add4e2b78721a1dfa8442146ebfd85))
+
 ### [1.11.1](https://github.com/ecomplus/discounts/compare/v1.11.0...v1.11.1) (2022-11-04)
 
 
