@@ -88,7 +88,9 @@ module.exports = appSdk => {
       }
       const kitDiscounts = getValidDiscountRules(config.product_kit_discounts, params, params.items)
         .sort((a, b) => {
-          if (a.min_quantity > b.min_quantity) {
+          if (!Array.isArray(a.product_ids) || !a.product_ids.length) {
+            return 1
+          } else if (a.min_quantity > b.min_quantity) {
             return -1
           } else if (b.min_quantity > a.min_quantity) {
             return 1
@@ -111,8 +113,12 @@ module.exports = appSdk => {
             : []
           let kitItems = productIds.length
             ? params.items.filter(item => item.quantity && productIds.indexOf(item.product_id) > -1)
-            : params.items
-          kitItems = kitItems.filter(item => discountedItemIds.indexOf(item._id) === -1)
+            : params.items.filter(item => item.quantity)
+          kitItems = kitItems.filter(item => discountedItemIds.indexOf(item.product_id) === -1)
+          if (!kitItems.length) {
+            return
+          }
+
           const recommendBuyTogether = () => {
             if (
               params.items.length === 1 &&
@@ -184,7 +190,7 @@ module.exports = appSdk => {
                   discount,
                   `KIT-${(index + 1)}-${i}`,
                   kitDiscount.label,
-                  ecomUtils.price(item)
+                  ecomUtils.price(item) * (kitDiscount.min_quantity || 1)
                 )
               })
             } else {
