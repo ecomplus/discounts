@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.12.0](https://github.com/ecomplus/discounts/compare/v1.11.2...v1.12.0) (2022-12-13)
+
+
+### Features
+
+* support api manipulated coupons through custom config fields ([d3a0f36](https://github.com/ecomplus/discounts/commit/d3a0f36f81fb402edc81a077b22d934a1ab8de0a))
+
 ### [1.11.2](https://github.com/ecomplus/discounts/compare/v1.11.1...v1.11.2) (2022-11-04)
 
 
