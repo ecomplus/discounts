@@ -264,6 +264,27 @@ module.exports = appSdk => {
       }
     }
 
+    // additional discount coupons for API manipualation with
+    // PATCH https://api.e-com.plus/v1/applications/<discounts_app_id>/hidden_data.json { COUPON }
+    if (!config.discount_rules) {
+      config.discount_rules = []
+    }
+    Object.keys(config).forEach((configField) => {
+      switch (configField) {
+        case 'freebies_rules':
+        case 'product_kit_discounts':
+        case 'discount_rules':
+          return
+      }
+      const configObj = config[configField]
+      if (configObj && configObj.discount) {
+        config.discount_rules.push({
+          ...configObj,
+          discount_coupon: configField
+        })
+      }
+    })
+
     const discountRules = getValidDiscountRules(config.discount_rules, params)
     if (discountRules.length) {
       const { discountRule, discountMatchEnum } = matchDiscountRule(discountRules, params)
