@@ -146,8 +146,8 @@ module.exports = appSdk => {
                 buyTogether.push({
                   products: buyTogetherProducts,
                   discount: {
-                    type: discountType,
-                    value: discountValue
+                    type: kitDiscount.originalDiscount.type || kitDiscount.discount.type,
+                    value: kitDiscount.originalDiscount.value || kitDiscount.discount.value
                   }
                 })
               }
