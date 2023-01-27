@@ -142,8 +142,6 @@ module.exports = appSdk => {
                   buyTogetherProducts[productId] = perItemQuantity
                 }
               })
-              const discountType = kitDiscount.originalDiscount.type || kitDiscount.discount.type
-              const discountValue = kitDiscount.originalDiscount.value || kitDiscount.discount.value
               if (Object.keys(buyTogetherProducts).length) {
                 buyTogether.push({
                   products: buyTogetherProducts,
