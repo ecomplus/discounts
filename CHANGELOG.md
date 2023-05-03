@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.2](https://github.com/ecomplus/discounts/compare/v1.12.1...v1.12.2) (2023-05-03)
+
+
+### Bug Fixes
+
+* do not count cancelled order on count for max usages ([601c913](https://github.com/ecomplus/discounts/commit/601c9135e2ab73836181db2bb91dd53755810ea6))
+
 ### [1.12.1](https://github.com/ecomplus/discounts/compare/v1.12.0...v1.12.1) (2023-01-27)
 
 
