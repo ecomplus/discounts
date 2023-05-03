@@ -368,7 +368,7 @@ module.exports = appSdk => {
             ) {
               // list orders to check discount usage limits
               return (async function () {
-                const url = '/orders.json?fields=_id' +
+                const url = '/orders.json?fields=status' +
                   `&extra_discount.app.label${(discountRule.case_insensitive ? '%=' : '=')}` +
                   encodeURIComponent(label)
                 const usageLimits = [{
@@ -388,7 +388,9 @@ module.exports = appSdk => {
                     try {
                       // send Store API request to list orders with filters
                       const { response } = await appSdk.apiRequest(storeId, `${url}${query}`)
-                      countOrders = response.data.result.length
+                      countOrders = response.data.result
+                        .filter(({ status }) => status !== 'cancelled')
+                        .length
                     } catch (err) {
                       return res.status(409).send({
                         error: 'CANT_CHECK_USAGE_LIMITS',
