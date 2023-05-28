@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.3](https://github.com/ecomplus/discounts/compare/v1.12.2...v1.12.3) (2023-05-28)
+
+
+### Bug Fixes
+
+* properly handle fixed discount on kit subtotal or lowest price ([#29](https://github.com/ecomplus/discounts/issues/29)) ([44b1e15](https://github.com/ecomplus/discounts/commit/44b1e15de3182cddc8e503bbd0ffc3995420a674))
+
 ### [1.12.2](https://github.com/ecomplus/discounts/compare/v1.12.1...v1.12.2) (2023-05-03)
 
 
