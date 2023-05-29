@@ -396,7 +396,9 @@ module.exports = appSdk => {
                   encodeURIComponent(label)
                 const usageLimits = [{
                   // limit by customer
-                  query: `&buyers._id=${customer._id}`,
+                  query: customer.doc_number
+                    ? `&buyers.doc_number=${customer.doc_number}`
+                    : `&buyers._id=${customer._id}`,
                   max: discountRule.usage_limit
                 }, {
                   // total limit
