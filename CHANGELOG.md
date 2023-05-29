@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.15.0](https://github.com/ecomplus/discounts/compare/v1.14.1...v1.15.0) (2023-05-29)
+
+
+### Features
+
+* limit coupon usage by customer doc number if param received ([981b134](https://github.com/ecomplus/discounts/commit/981b134c5e17dc7fa327a3f51675288117ce4265))
+
 ### [1.14.1](https://github.com/ecomplus/discounts/compare/v1.14.0...v1.14.1) (2023-05-29)
 
 
