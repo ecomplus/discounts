@@ -362,7 +362,10 @@ module.exports = appSdk => {
             }
             if (!checkOpenPromotion(discountRule)) {
               // check for additional open discount
-              const { openDiscountRule, openDiscountMatchEnum } = matchDiscountRule(discountRules, {})
+              const {
+                discountRule: openDiscountRule,
+                discountMatchEnum: openDiscountMatchEnum
+              } = matchDiscountRule(discountRules, {})
               if (openDiscountRule && openDiscountRule.cumulative_discount !== false) {
                 let checkAmount
                 if (openDiscountRule.discount.min_amount) {
