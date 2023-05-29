@@ -366,17 +366,20 @@ module.exports = appSdk => {
                 discountRule: openDiscountRule,
                 discountMatchEnum: openDiscountMatchEnum
               } = matchDiscountRule(discountRules, {})
-              if (openDiscountRule && openDiscountRule.cumulative_discount !== false) {
-                let checkAmount
-                if (openDiscountRule.discount.min_amount) {
-                  checkAmount = params.amount[openDiscountRule.discount.amount_field || 'total']
+              if (
+                openDiscountRule &&
+                openDiscountRule.cumulative_discount !== false &&
+                openDiscountRule.discount.min_amount
+              ) {
+                let checkAmount = params.amount[openDiscountRule.discount.amount_field || 'total']
+                if (checkAmount) {
                   // subtract current discount to validate cumulative open discount min amount
-                  if (checkAmount && response.discount_rule) {
+                  if (response.discount_rule) {
                     checkAmount -= response.discount_rule.extra_discount.value
                   }
-                }
-                if (!checkAmount || openDiscountRule.discount.min_amount >= checkAmount) {
-                  addDiscount(openDiscountRule.discount, openDiscountMatchEnum)
+                  if (openDiscountRule.discount.min_amount <= checkAmount) {
+                    addDiscount(openDiscountRule.discount, openDiscountMatchEnum)
+                  }
                 }
               }
             }
