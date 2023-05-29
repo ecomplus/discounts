@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.0](https://github.com/ecomplus/discounts/compare/v1.12.3...v1.13.0) (2023-05-29)
+
+
+### Features
+
+* check for additional open discount after utm/coupon/customer match ([5cb9bb7](https://github.com/ecomplus/discounts/commit/5cb9bb749d2d55d5ad80d1220723bf93b1386c0a))
+
 ### [1.12.3](https://github.com/ecomplus/discounts/compare/v1.12.2...v1.12.3) (2023-05-28)
 
 
