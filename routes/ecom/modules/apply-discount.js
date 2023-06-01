@@ -386,7 +386,7 @@ module.exports = appSdk => {
 
             const { customer } = params
             if (
-              customer && customer._id &&
+              customer && (customer._id || customer.doc_number) &&
               (discountRule.usage_limit > 0 || discountRule.total_usage_limit > 0)
             ) {
               // list orders to check discount usage limits
