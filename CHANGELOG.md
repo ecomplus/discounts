@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.15.1](https://github.com/ecomplus/discounts/compare/v1.15.0...v1.15.1) (2023-06-01)
+
+
+### Bug Fixes
+
+* check for customer doc number for usage limit even without customer id ([3f547ac](https://github.com/ecomplus/discounts/commit/3f547ac9e6cb4b0390eca69f9d82951098edbf30))
+
 ## [1.15.0](https://github.com/ecomplus/discounts/compare/v1.14.1...v1.15.0) (2023-05-29)
 
 
