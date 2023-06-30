@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.16.0](https://github.com/ecomplus/discounts/compare/v1.15.1...v1.16.0) (2023-06-30)
+
+
+### Features
+
+* add option to deduct other discounts before freebie application ([e8077cd](https://github.com/ecomplus/discounts/commit/e8077cd8022a237e38e549ca08378dd4de0f4d30))
+* supporting kit discounts by category ids ([9d2aa29](https://github.com/ecomplus/discounts/commit/9d2aa29c73cb191bbd38d3dfd1639ff6735285e8))
+
 ### [1.15.1](https://github.com/ecomplus/discounts/compare/v1.15.0...v1.15.1) (2023-06-01)
 
 
