@@ -197,9 +197,6 @@
         "items": {
           "type": "object",
           "title": "Desconto por kit",
-          "required": [
-            "product_ids"
-          ],
           "additionalProperties": false,
           "properties": {
             "label": {
@@ -234,6 +231,16 @@
                 "type": "string",
                 "pattern": "^[a-f0-9]{24}$",
                 "title": "ID do produto"
+              }
+            },
+            "category_ids": {
+              "title": "Lista de categorias do kit",
+              "description": "Se preenchido, o kit será composto por quaisquer produtos das categorias listadas",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{24}$",
+                "title": "ID da categoria"
               }
             },
             "min_quantity": {

@@ -79,7 +79,7 @@ module.exports = appSdk => {
       // try product kit discounts first
       if (Array.isArray(config.product_kit_discounts)) {
         config.product_kit_discounts = config.product_kit_discounts.map(kitDiscount => {
-          if (!kitDiscount.product_ids) {
+          if (!kitDiscount.product_ids && !kitDiscount.category_ids) {
             // kit with any items
             kitDiscount.product_ids = []
           }
@@ -114,10 +114,28 @@ module.exports = appSdk => {
           const productIds = Array.isArray(kitDiscount.product_ids)
             ? kitDiscount.product_ids
             : []
-          let kitItems = productIds.length
-            ? params.items.filter(item => item.quantity && productIds.indexOf(item.product_id) > -1)
-            : params.items.filter(item => item.quantity)
-          kitItems = kitItems.filter(item => discountedItemIds.indexOf(item.product_id) === -1)
+          const categoryIds = Array.isArray(kitDiscount.category_ids)
+            ? kitDiscount.category_ids
+            : []
+          let kitItems
+          if (productIds.length) {
+            kitItems = params.items.filter(item => productIds.indexOf(item.product_id) > -1)
+          } else if (categoryIds.length) {
+            kitItems = params.items.filter(item => {
+              if (Array.isArray(item.categories)) {
+                for (let i = 0; i < item.categories.length; i++) {
+                  const category = item.categories[i]
+                  if (categoryIds.indexOf(category._id) > -1 || categoryIds.indexOf(category.name) > -1) {
+                    return true
+                  }
+                }
+              }
+              return false
+            })
+          }
+          kitItems = kitItems.filter(item => {
+            return item.quantity && discountedItemIds.indexOf(item.product_id) === -1
+          })
           if (!kitItems.length) {
             return
           }
@@ -183,6 +201,24 @@ module.exports = appSdk => {
                 if (productId && !kitItems.find(item => item.quantity && item.product_id === productId)) {
                   // product not on current cart
                   return recommendBuyTogether()
+                }
+              }
+              if (categoryIds.length) {
+                for (let i = 0; i < kitItems.length; i++) {
+                  const { categories } = kitItems[i]
+                  let hasListedCategory = false
+                  if (categories) {
+                    for (let i = 0; i < categories.length; i++) {
+                      const category = categories[i]
+                      if (categoryIds.find(categoryId => categoryId === category._id)) {
+                        hasListedCategory = true
+                        continue
+                      }
+                    }
+                  }
+                  if (!hasListedCategory) {
+                    return recommendBuyTogether()
+                  }
                 }
               }
             }
