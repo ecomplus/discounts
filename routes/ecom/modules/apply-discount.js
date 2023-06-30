@@ -75,6 +75,74 @@ module.exports = appSdk => {
       return false
     }
 
+    const addFreebies = () => {
+      if (params.items && params.items.length) {
+        // gift products (freebies) campaings
+        if (Array.isArray(config.freebies_rules)) {
+          const validFreebiesRules = config.freebies_rules.filter(rule => {
+            return validateDateRange(rule) &&
+              validateCustomerId(rule, params) &&
+              checkCampaignProducts(rule.check_product_ids, params) &&
+              Array.isArray(rule.product_ids) &&
+              rule.product_ids.length
+          })
+          if (validFreebiesRules) {
+            let subtotal = 0
+            params.items.forEach(item => {
+              subtotal += (item.quantity * ecomUtils.price(item))
+            })
+
+            let bestRule
+            let discountValue = 0
+            for (let i = 0; i < validFreebiesRules.length; i++) {
+              const rule = validFreebiesRules[i]
+              // start calculating discount
+              let value = 0
+              rule.product_ids.forEach(productId => {
+                const item = params.items.find(item => productId === item.product_id)
+                if (item) {
+                  value += ecomUtils.price(item)
+                }
+              })
+              let fixedSubtotal = subtotal - value
+              if (rule.deduct_discounts) {
+                if (response.discount_rule) {
+                  fixedSubtotal -= response.discount_rule.extra_discount.value
+                }
+                if (params.amount.discount) {
+                  fixedSubtotal -= params.amount.discount
+                }
+              }
+              if (!bestRule || value > discountValue || bestRule.min_subtotal < rule.min_subtotal) {
+                if (!(rule.min_subtotal > fixedSubtotal)) {
+                  bestRule = rule
+                  discountValue = value
+                } else if (!discountValue && subtotal >= rule.min_subtotal) {
+                  // discount not applicable yet but additional freebies are available
+                  bestRule = rule
+                }
+              }
+            }
+
+            if (bestRule) {
+              // provide freebie products \o/
+              response.freebie_product_ids = bestRule.product_ids
+              if (discountValue) {
+                addDiscount(
+                  {
+                    type: 'fixed',
+                    value: discountValue
+                  },
+                  'FREEBIES',
+                  bestRule.label
+                )
+              }
+            }
+          }
+        }
+      }
+    }
+
     if (params.items && params.items.length) {
       // try product kit discounts first
       if (Array.isArray(config.product_kit_discounts)) {
@@ -242,62 +310,6 @@ module.exports = appSdk => {
       if (buyTogether.length) {
         response.buy_together = buyTogether
       }
-
-      // gift products (freebies) campaings
-      if (Array.isArray(config.freebies_rules)) {
-        const validFreebiesRules = config.freebies_rules.filter(rule => {
-          return validateDateRange(rule) &&
-            validateCustomerId(rule, params) &&
-            checkCampaignProducts(rule.check_product_ids, params) &&
-            Array.isArray(rule.product_ids) &&
-            rule.product_ids.length
-        })
-        if (validFreebiesRules) {
-          let subtotal = 0
-          params.items.forEach(item => {
-            subtotal += (item.quantity * ecomUtils.price(item))
-          })
-
-          let bestRule
-          let discountValue = 0
-          for (let i = 0; i < validFreebiesRules.length; i++) {
-            const rule = validFreebiesRules[i]
-            // start calculating discount
-            let value = 0
-            rule.product_ids.forEach(productId => {
-              const item = params.items.find(item => productId === item.product_id)
-              if (item) {
-                value += ecomUtils.price(item)
-              }
-            })
-            const fixedSubtotal = subtotal - value
-            if (!bestRule || value > discountValue || bestRule.min_subtotal < rule.min_subtotal) {
-              if (!(rule.min_subtotal > fixedSubtotal)) {
-                bestRule = rule
-                discountValue = value
-              } else if (!discountValue && subtotal >= rule.min_subtotal) {
-                // discount not applicable yet but additional freebies are available
-                bestRule = rule
-              }
-            }
-          }
-
-          if (bestRule) {
-            // provide freebie products \o/
-            response.freebie_product_ids = bestRule.product_ids
-            if (discountValue) {
-              addDiscount(
-                {
-                  type: 'fixed',
-                  value: discountValue
-                },
-                'FREEBIES',
-                bestRule.label
-              )
-            }
-          }
-        }
-      }
     }
 
     // additional discount coupons for API manipualation with
@@ -326,6 +338,7 @@ module.exports = appSdk => {
       const { discountRule, discountMatchEnum } = matchDiscountRule(discountRules, params)
       if (discountRule) {
         if (!checkCampaignProducts(discountRule.product_ids, params)) {
+          addFreebies()
           return res.send({
             available_extra_discount: response.available_extra_discount,
             invalid_coupon_message: params.lang === 'pt_br'
@@ -340,6 +353,7 @@ module.exports = appSdk => {
           for (let i = 0; i < params.items.length; i++) {
             const item = params.items[i]
             if (item.quantity && excludedProducts.includes(item.product_id)) {
+              addFreebies()
               return res.send({
                 available_extra_discount: response.available_extra_discount,
                 invalid_coupon_message: params.lang === 'pt_br'
@@ -382,6 +396,7 @@ module.exports = appSdk => {
           ) {
             // explain discount can't be applied :(
             // https://apx-mods.e-com.plus/api/v1/apply_discount/response_schema.json?store_id=100
+            addFreebies()
             return res.send({
               invalid_coupon_message: params.lang === 'pt_br'
                 ? 'A promoção não pôde ser aplicada porque este desconto não é cumulativo'
@@ -461,6 +476,7 @@ module.exports = appSdk => {
 
                     if (countOrders >= max) {
                       // limit reached
+                      addFreebies()
                       return res.send({
                         invalid_coupon_message: params.lang === 'pt_br'
                           ? 'A promoção não pôde ser aplicada porque já atingiu o limite de usos'
@@ -469,9 +485,11 @@ module.exports = appSdk => {
                     }
                   }
                 }
+                addFreebies()
                 respondSuccess()
               })()
             } else {
+              addFreebies()
               return respondSuccess()
             }
           }
@@ -479,6 +497,7 @@ module.exports = appSdk => {
       }
     }
 
+    addFreebies()
     // response with no error nor discount applied
     respondSuccess()
   }
