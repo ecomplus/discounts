@@ -185,7 +185,7 @@ module.exports = appSdk => {
           const categoryIds = Array.isArray(kitDiscount.category_ids)
             ? kitDiscount.category_ids
             : []
-          let kitItems
+          let kitItems = []
           if (productIds.length) {
             kitItems = params.items.filter(item => productIds.indexOf(item.product_id) > -1)
           } else if (categoryIds.length) {
