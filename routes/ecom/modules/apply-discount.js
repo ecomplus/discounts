@@ -200,6 +200,8 @@ module.exports = appSdk => {
               }
               return false
             })
+          } else {
+            kitItems = [...params.items]
           }
           kitItems = kitItems.filter(item => {
             return item.quantity && discountedItemIds.indexOf(item.product_id) === -1
