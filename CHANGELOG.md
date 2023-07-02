@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.16.3](https://github.com/ecomplus/discounts/compare/v1.16.2...v1.16.3) (2023-07-02)
+
+
+### Bug Fixes
+
+* properly calculating discount value for kit discounts per category ids ([0e543a1](https://github.com/ecomplus/discounts/commit/0e543a19ce4d10515823129e1a9d5cd28eacad1d))
+
 ### [1.16.2](https://github.com/ecomplus/discounts/compare/v1.16.1...v1.16.2) (2023-06-30)
 
 
