@@ -147,8 +147,8 @@ module.exports = appSdk => {
       // try product kit discounts first
       if (Array.isArray(config.product_kit_discounts)) {
         config.product_kit_discounts = config.product_kit_discounts.map(kitDiscount => {
-          if (!kitDiscount.product_ids && !kitDiscount.category_ids) {
-            // kit with any items
+          if (!kitDiscount.product_ids) {
+            // kit with any items (or per category)
             kitDiscount.product_ids = []
           }
           return kitDiscount
@@ -193,7 +193,7 @@ module.exports = appSdk => {
               if (Array.isArray(item.categories)) {
                 for (let i = 0; i < item.categories.length; i++) {
                   const category = item.categories[i]
-                  if (categoryIds.indexOf(category._id) > -1 || categoryIds.indexOf(category.name) > -1) {
+                  if (categoryIds.indexOf(category._id) > -1) {
                     return true
                   }
                 }
