@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.16.4](https://github.com/ecomplus/discounts/compare/v1.16.3...v1.16.4) (2023-07-03)
+
+
+### Bug Fixes
+
+* check if discount rule customer ids is saved as object and convert to array ([e0ad354](https://github.com/ecomplus/discounts/commit/e0ad354b4b6a96c83ee7238027e3378cf77c0c84))
+
 ### [1.16.3](https://github.com/ecomplus/discounts/compare/v1.16.2...v1.16.3) (2023-07-02)
 
 
