@@ -39,7 +39,11 @@ module.exports = appSdk => {
     const addDiscount = (discount, flag, label, maxDiscount) => {
       let value
       if (typeof maxDiscount !== 'number') {
-        maxDiscount = params.amount[discount.apply_at || 'total']
+        const applyAt = discount.apply_at || 'total'
+        maxDiscount = params.amount[applyAt]
+        if (applyAt === 'total' && response.discount_rule) {
+          maxDiscount -= response.discount_rule.extra_discount.value
+        }
       }
       if (maxDiscount) {
         // update amount discount and total
