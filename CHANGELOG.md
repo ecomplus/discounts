@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.16.5](https://github.com/ecomplus/discounts/compare/v1.16.4...v1.16.5) (2023-07-04)
+
+
+### Bug Fixes
+
+* subtract already applied discounts for max discount on total ([5125802](https://github.com/ecomplus/discounts/commit/5125802373eb5a51cff7c4beae59cef77e28145f))
+
 ### [1.16.4](https://github.com/ecomplus/discounts/compare/v1.16.3...v1.16.4) (2023-07-03)
 
 
