@@ -418,6 +418,21 @@ module.exports = appSdk => {
               response.discount_rule.description = discountRule.description
             }
             if (!checkOpenPromotion(discountRule)) {
+              if (discountRule.cumulative_discount !== false) {
+                // check for additional same-rule discount on different amount
+                const {
+                  discountRule: secondDiscountRule,
+                  discountMatchEnum: secondDiscountMatchEnum
+                } = matchDiscountRule(discountRules, params, discountRule.discount.apply_at || 'total')
+                if (
+                  secondDiscountRule &&
+                  secondDiscountRule.cumulative_discount !== false &&
+                  !(secondDiscountRule.discount.min_amount > params.amount[secondDiscountRule.discount.amount_field || 'total'])
+                ) {
+                  addDiscount(secondDiscountRule.discount, secondDiscountMatchEnum)
+                }
+              }
+
               // check for additional open discount
               const {
                 discountRule: openDiscountRule,
