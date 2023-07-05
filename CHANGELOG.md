@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.17.0](https://github.com/ecomplus/discounts/compare/v1.16.6...v1.17.0) (2023-07-05)
+
+
+### Features
+
+* supporting second discount with same-rule on different amount ([61d1b27](https://github.com/ecomplus/discounts/commit/61d1b27fe0d682251af7c5f606e069e95d07dfd5))
+
 ### [1.16.6](https://github.com/ecomplus/discounts/compare/v1.16.5...v1.16.6) (2023-07-05)
 
 
