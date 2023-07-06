@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.17.1](https://github.com/ecomplus/discounts/compare/v1.17.0...v1.17.1) (2023-07-06)
+
+
+### Bug Fixes
+
+* **apply-discount:** set different tag in second discount ([57c4e34](https://github.com/ecomplus/discounts/commit/57c4e34652c1daa893adc98d71ed8105f388673d))
+
 ## [1.17.0](https://github.com/ecomplus/discounts/compare/v1.16.6...v1.17.0) (2023-07-05)
 
 
