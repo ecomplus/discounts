@@ -429,7 +429,7 @@ module.exports = appSdk => {
                   secondDiscountRule.cumulative_discount !== false &&
                   !(secondDiscountRule.discount.min_amount > params.amount[secondDiscountRule.discount.amount_field || 'total'])
                 ) {
-                  addDiscount(secondDiscountRule.discount, secondDiscountMatchEnum)
+                  addDiscount(secondDiscountRule.discount, secondDiscountMatchEnum + '-2')
                 }
               }
 
