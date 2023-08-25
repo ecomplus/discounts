@@ -16,7 +16,7 @@ const router = express.Router()
 const port = process.env.PORT || 3000
 
 app.use(bodyParser.urlencoded({ extended: false, limit: '1mb' }))
-app.use(bodyParser.json({ limit: '1mb' }))
+app.use(bodyParser.json({ limit: '2mb' }))
 
 app.use((req, res, next) => {
   if (req.url.startsWith('/ecom/')) {
