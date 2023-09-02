@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.17.3](https://github.com/ecomplus/discounts/compare/v1.17.2...v1.17.3) (2023-09-02)
+
+
+### Bug Fixes
+
+* keeping other discounts when coupon is invalidated ([7fb5a0a](https://github.com/ecomplus/discounts/commit/7fb5a0a10e9bcbd5fceb5413afb9bb36f75fc2fe))
+
 ### [1.17.2](https://github.com/ecomplus/discounts/compare/v1.17.1...v1.17.2) (2023-08-25)
 
 
