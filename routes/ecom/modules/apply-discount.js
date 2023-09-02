@@ -36,7 +36,7 @@ module.exports = appSdk => {
       res.send(response)
     }
 
-    const addDiscount = (discount, flag, label, maxDiscount) => {
+    const getDiscountValue = (discount, maxDiscount) => {
       let value
       if (typeof maxDiscount !== 'number') {
         const applyAt = discount.apply_at || 'total'
@@ -56,7 +56,11 @@ module.exports = appSdk => {
           value = maxDiscount
         }
       }
+      return value
+    }
 
+    const addDiscount = (discount, flag, label, maxDiscount) => {
+      const value = getDiscountValue(discount, maxDiscount)
       if (value) {
         if (response.discount_rule) {
           // accumulate discount
@@ -396,13 +400,22 @@ module.exports = appSdk => {
             discountRule.cumulative_discount === false &&
             (response.discount_rule || params.amount.discount)
           ) {
-            // explain discount can't be applied :(
-            // https://apx-mods.e-com.plus/api/v1/apply_discount/response_schema.json?store_id=100
-            addFreebies()
-            response.invalid_coupon_message = params.lang === 'pt_br'
-              ? 'A promoção não pôde ser aplicada porque este desconto não é cumulativo'
-              : 'This discount is not cumulative'
-            return respondSuccess()
+            if (
+              response.discount_rule.extra_discount &&
+              !params.amount.discount &&
+              getDiscountValue(discount) > response.discount_rule.extra_discount.value
+            ) {
+              // replace discount with new bigger one
+              delete response.discount_rule
+            } else {
+              // explain discount can't be applied :(
+              // https://apx-mods.e-com.plus/api/v1/apply_discount/response_schema.json?store_id=100
+              addFreebies()
+              response.invalid_coupon_message = params.lang === 'pt_br'
+                ? 'A promoção não pôde ser aplicada porque este desconto não é cumulativo'
+                : 'This discount is not cumulative'
+              return respondSuccess()
+            }
           }
 
           // we have a discount to apply \o/
