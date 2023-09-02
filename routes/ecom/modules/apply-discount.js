@@ -345,12 +345,10 @@ module.exports = appSdk => {
       if (discountRule) {
         if (!checkCampaignProducts(discountRule.product_ids, params)) {
           addFreebies()
-          return res.send({
-            available_extra_discount: response.available_extra_discount,
-            invalid_coupon_message: params.lang === 'pt_br'
-              ? 'Nenhum produto da promoção está incluído no carrinho'
-              : 'No promotion products are included in the cart'
-          })
+          response.invalid_coupon_message = params.lang === 'pt_br'
+            ? 'Nenhum produto da promoção está incluído no carrinho'
+            : 'No promotion products are included in the cart'
+          return respondSuccess()
         }
 
         const excludedProducts = discountRule.excluded_product_ids
@@ -360,12 +358,10 @@ module.exports = appSdk => {
             const item = params.items[i]
             if (item.quantity && excludedProducts.includes(item.product_id)) {
               addFreebies()
-              return res.send({
-                available_extra_discount: response.available_extra_discount,
-                invalid_coupon_message: params.lang === 'pt_br'
-                  ? `Promoção é inválida para o produto ${item.name}`
-                  : `Invalid promotion for product ${item.name}`
-              })
+              response.invalid_coupon_message = params.lang === 'pt_br'
+                ? `Promoção é inválida para o produto ${item.name}`
+                : `Invalid promotion for product ${item.name}`
+              return respondSuccess()
             }
           }
         }
@@ -403,11 +399,10 @@ module.exports = appSdk => {
             // explain discount can't be applied :(
             // https://apx-mods.e-com.plus/api/v1/apply_discount/response_schema.json?store_id=100
             addFreebies()
-            return res.send({
-              invalid_coupon_message: params.lang === 'pt_br'
-                ? 'A promoção não pôde ser aplicada porque este desconto não é cumulativo'
-                : 'This discount is not cumulative'
-            })
+            response.invalid_coupon_message = params.lang === 'pt_br'
+              ? 'A promoção não pôde ser aplicada porque este desconto não é cumulativo'
+              : 'This discount is not cumulative'
+            return respondSuccess()
           }
 
           // we have a discount to apply \o/
@@ -498,11 +493,10 @@ module.exports = appSdk => {
                     if (countOrders >= max) {
                       // limit reached
                       addFreebies()
-                      return res.send({
-                        invalid_coupon_message: params.lang === 'pt_br'
-                          ? 'A promoção não pôde ser aplicada porque já atingiu o limite de usos'
-                          : 'The promotion could not be applied because it has already reached the usage limit'
-                      })
+                      response.invalid_coupon_message = params.lang === 'pt_br'
+                        ? 'A promoção não pôde ser aplicada porque já atingiu o limite de usos'
+                        : 'The promotion could not be applied because it has already reached the usage limit'
+                      return respondSuccess()
                     }
                   }
                 }
