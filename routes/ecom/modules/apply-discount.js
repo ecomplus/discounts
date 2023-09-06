@@ -44,8 +44,12 @@ module.exports = appSdk => {
         if (applyAt === 'total' && response.discount_rule) {
           maxDiscount -= response.discount_rule.extra_discount.value
         }
+        if (applyAt !== 'freight') {
+          const { value } = getFreebiesPreview()
+          maxDiscount -= value
+        }
       }
-      if (maxDiscount) {
+      if (maxDiscount > 0) {
         // update amount discount and total
         if (discount.type === 'percentage') {
           value = maxDiscount * discount.value / 100
@@ -83,7 +87,7 @@ module.exports = appSdk => {
       return false
     }
 
-    const addFreebies = () => {
+    const getFreebiesPreview = () => {
       if (params.items && params.items.length) {
         // gift products (freebies) campaings
         if (Array.isArray(config.freebies_rules)) {
@@ -136,18 +140,26 @@ module.exports = appSdk => {
               // provide freebie products \o/
               response.freebie_product_ids = bestRule.product_ids
               if (discountValue) {
-                addDiscount(
-                  {
-                    type: 'fixed',
-                    value: discountValue
-                  },
-                  'FREEBIES',
-                  bestRule.label
-                )
+                return {
+                  value: discountValue,
+                  label: bestRule.label
+                }
               }
             }
           }
         }
+      }
+      return { value: 0 }
+    }
+
+    const addFreebies = () => {
+      const { value, label } = getFreebiesPreview()
+      if (value) {
+        addDiscount(
+          { type: 'fixed', value },
+          'FREEBIES',
+          label
+        )
       }
     }
 
@@ -272,7 +284,10 @@ module.exports = appSdk => {
             }
           }
 
-          if (!params.amount || !(discount.min_amount > params.amount.total)) {
+          if (
+            !params.amount ||
+            !(discount.min_amount > params.amount.total - getFreebiesPreview().value)
+          ) {
             if (kitDiscount.check_all_items !== false) {
               for (let i = 0; i < productIds.length; i++) {
                 const productId = productIds[i]
@@ -392,9 +407,11 @@ module.exports = appSdk => {
 
         // params object follows list payments request schema:
         // https://apx-mods.e-com.plus/api/v1/apply_discount/schema.json?store_id=100
+        let checkAmount = params.amount[discountRule.discount.amount_field || 'total']
+        if (discountRule.discount.amount_field !== 'freight') checkAmount -= getFreebiesPreview().value
         if (
           params.amount && params.amount.total > 0 &&
-          !(discountRule.discount.min_amount > params.amount[discountRule.discount.amount_field || 'total'])
+          !(discountRule.discount.min_amount > checkAmount)
         ) {
           if (
             discountRule.cumulative_discount === false &&
@@ -432,10 +449,12 @@ module.exports = appSdk => {
                   discountRule: secondDiscountRule,
                   discountMatchEnum: secondDiscountMatchEnum
                 } = matchDiscountRule(discountRules, params, discountRule.discount.apply_at || 'total')
+                let checkAmount = params.amount[secondDiscountRule.discount.amount_field || 'total']
+                if (secondDiscountRule.discount.amount_field !== 'freight') checkAmount -= getFreebiesPreview().value
                 if (
                   secondDiscountRule &&
                   secondDiscountRule.cumulative_discount !== false &&
-                  !(secondDiscountRule.discount.min_amount > params.amount[secondDiscountRule.discount.amount_field || 'total'])
+                  !(secondDiscountRule.discount.min_amount > checkAmount)
                 ) {
                   addDiscount(secondDiscountRule.discount, secondDiscountMatchEnum + '-2')
                 }
@@ -454,9 +473,8 @@ module.exports = appSdk => {
                 let checkAmount = params.amount[openDiscountRule.discount.amount_field || 'total']
                 if (checkAmount) {
                   // subtract current discount to validate cumulative open discount min amount
-                  if (response.discount_rule) {
-                    checkAmount -= response.discount_rule.extra_discount.value
-                  }
+                  if (response.discount_rule) checkAmount -= response.discount_rule.extra_discount.value
+                  if (openDiscountRule.discount.amount_field !== 'freight') checkAmount -= getFreebiesPreview().value
                   if (openDiscountRule.discount.min_amount <= checkAmount) {
                     addDiscount(openDiscountRule.discount, openDiscountMatchEnum)
                   }
