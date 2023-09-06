@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.17.6](https://github.com/ecomplus/discounts/compare/v1.17.5...v1.17.6) (2023-09-06)
+
+
+### Bug Fixes
+
+* prevent error with undefined second discount rule object ([438762f](https://github.com/ecomplus/discounts/commit/438762f8b02f1e84559feac8c2d4d56ffcd2b562))
+
 ### [1.17.5](https://github.com/ecomplus/discounts/compare/v1.17.4...v1.17.5) (2023-09-06)
 
 
