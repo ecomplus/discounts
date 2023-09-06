@@ -407,8 +407,11 @@ module.exports = appSdk => {
 
         // params object follows list payments request schema:
         // https://apx-mods.e-com.plus/api/v1/apply_discount/schema.json?store_id=100
-        let checkAmount = params.amount[discountRule.discount.amount_field || 'total']
-        if (discountRule.discount.amount_field !== 'freight') checkAmount -= getFreebiesPreview().value
+        let checkAmount
+        if (params.amount) {
+          checkAmount = params.amount[discountRule.discount.amount_field || 'total']
+          if (discountRule.discount.amount_field !== 'freight') checkAmount -= getFreebiesPreview().value
+        }
         if (
           params.amount && params.amount.total > 0 &&
           !(discountRule.discount.min_amount > checkAmount)
@@ -449,14 +452,15 @@ module.exports = appSdk => {
                   discountRule: secondDiscountRule,
                   discountMatchEnum: secondDiscountMatchEnum
                 } = matchDiscountRule(discountRules, params, discountRule.discount.apply_at || 'total')
-                let checkAmount = params.amount[secondDiscountRule.discount.amount_field || 'total']
-                if (secondDiscountRule.discount.amount_field !== 'freight') checkAmount -= getFreebiesPreview().value
-                if (
-                  secondDiscountRule &&
-                  secondDiscountRule.cumulative_discount !== false &&
-                  !(secondDiscountRule.discount.min_amount > checkAmount)
-                ) {
-                  addDiscount(secondDiscountRule.discount, secondDiscountMatchEnum + '-2')
+                if (secondDiscountRule) {
+                  let checkAmount = params.amount[secondDiscountRule.discount.amount_field || 'total']
+                  if (secondDiscountRule.discount.amount_field !== 'freight') checkAmount -= getFreebiesPreview().value
+                  if (
+                    secondDiscountRule.cumulative_discount !== false &&
+                    !(secondDiscountRule.discount.min_amount > checkAmount)
+                  ) {
+                    addDiscount(secondDiscountRule.discount, secondDiscountMatchEnum + '-2')
+                  }
                 }
               }
 
