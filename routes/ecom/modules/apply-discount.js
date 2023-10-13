@@ -99,15 +99,26 @@ module.exports = appSdk => {
               rule.product_ids.length
           })
           if (validFreebiesRules) {
-            let subtotal = 0
-            params.items.forEach(item => {
-              subtotal += (item.quantity * ecomUtils.price(item))
-            })
-
             let bestRule
             let discountValue = 0
             for (let i = 0; i < validFreebiesRules.length; i++) {
               const rule = validFreebiesRules[i]
+              let subtotal = 0
+              params.items.forEach(item => {
+                if (Array.isArray(rule.category_ids)) {
+                  if (Array.isArray(item.categories)) {
+                    for (let i = 0; i < item.categories.length; i++) {
+                      const category = item.categories[i]
+                      if (rule.category_ids.indexOf(category._id) > -1) {
+                        subtotal += (item.quantity * ecomUtils.price(item))
+                        break
+                      }
+                    }
+                  }
+                  return
+                }
+                subtotal += (item.quantity * ecomUtils.price(item))
+              })
               // start calculating discount
               let value = 0
               rule.product_ids.forEach(productId => {

@@ -411,6 +411,16 @@
                 "pattern": "^[a-f0-9]{24}$",
                 "title": "ID do produto"
               }
+            },
+            "category_ids": {
+              "title": "Categorias para brinde",
+              "description": "Se preenchido, o subtotal mínimo será calculado apenas com produtos das categorias listadas",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{24}$",
+                "title": "ID da categoria"
+              }
             }
           }
         }
