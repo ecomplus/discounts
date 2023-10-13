@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.18.0](https://github.com/ecomplus/discounts/compare/v1.17.6...v1.18.0) (2023-10-13)
+
+
+### Features
+
+* add optional categories filter to min subtotal for freebies ([f2f64e8](https://github.com/ecomplus/discounts/commit/f2f64e826c9bc8f8bed73630627a68c3aa29d17e))
+
 ### [1.17.6](https://github.com/ecomplus/discounts/compare/v1.17.5...v1.17.6) (2023-09-06)
 
 
