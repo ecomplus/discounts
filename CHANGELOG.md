@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.19.0](https://github.com/ecomplus/discounts/compare/v1.18.0...v1.19.0) (2023-11-06)
+
+
+### Features
+
+* add option to configure cumutative freebie rules ([771e671](https://github.com/ecomplus/discounts/commit/771e6718adee674ab9128d67b636b4401e09cdc9))
+
 ## [1.18.0](https://github.com/ecomplus/discounts/compare/v1.17.6...v1.18.0) (2023-10-13)
 
 
