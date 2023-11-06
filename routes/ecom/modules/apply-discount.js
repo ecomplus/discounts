@@ -99,6 +99,7 @@ module.exports = appSdk => {
               rule.product_ids.length
           })
           if (validFreebiesRules) {
+            const cumulativeRules = []
             let bestRule
             let discountValue = 0
             for (let i = 0; i < validFreebiesRules.length; i++) {
@@ -119,6 +120,9 @@ module.exports = appSdk => {
                 }
                 subtotal += (item.quantity * ecomUtils.price(item))
               })
+              if (subtotal <= 0) {
+                continue
+              }
               // start calculating discount
               let value = 0
               rule.product_ids.forEach(productId => {
@@ -136,6 +140,9 @@ module.exports = appSdk => {
                   fixedSubtotal -= params.amount.discount
                 }
               }
+              if (rule.cumulative_freebie === true && !(rule.min_subtotal > fixedSubtotal)) {
+                cumulativeRules.push({ rule, value })
+              }
               if (!bestRule || value > discountValue || bestRule.min_subtotal < rule.min_subtotal) {
                 if (!(rule.min_subtotal > fixedSubtotal)) {
                   bestRule = rule
@@ -151,6 +158,21 @@ module.exports = appSdk => {
               // provide freebie products \o/
               response.freebie_product_ids = bestRule.product_ids
               if (discountValue) {
+                if (bestRule.cumulative_freebie === true) {
+                  cumulativeRules.forEach(({ rule, value }) => {
+                    for (let i = 0; i < response.freebie_product_ids.length; i++) {
+                      const productId = response.freebie_product_ids[i]
+                      if (rule.product_ids.includes(productId)) {
+                        // ignoring cumulative freebie rules with repeated products
+                        return
+                      }
+                    }
+                    discountValue += value
+                    rule.product_ids.forEach((productId) => {
+                      response.freebie_product_ids.push(productId)
+                    })
+                  })
+                }
                 return {
                   value: discountValue,
                   label: bestRule.label

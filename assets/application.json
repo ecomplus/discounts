@@ -421,6 +421,12 @@
                 "pattern": "^[a-f0-9]{24}$",
                 "title": "ID da categoria"
               }
+            },
+            "cumulative_freebie": {
+              "type": "boolean",
+              "default": false,
+              "title": "Brinde cumulativo",
+              "description": "Se o brinde poderá ser aplicado com outras regras de brindes no mesmo carrinho"
             }
           }
         }
