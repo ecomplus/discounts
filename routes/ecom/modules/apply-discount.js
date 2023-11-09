@@ -12,7 +12,7 @@ const {
 } = require('./../../../lib/helpers')
 
 module.exports = appSdk => {
-  return (req, res) => {
+  return async (req, res) => {
     const { storeId } = req
     // body was already pre-validated on @/bin/web.js
     // treat module request body
@@ -34,6 +34,49 @@ module.exports = appSdk => {
         delete response.discount_rule
       }
       res.send(response)
+    }
+
+    const checkUsageLimit = async (discountRule, label) => {
+      const { customer } = params
+      if (!label) {
+        label = discountRule.label
+      }
+      if (
+        label &&
+        customer && (customer._id || customer.doc_number) &&
+        (discountRule.usage_limit > 0 || discountRule.total_usage_limit > 0)
+      ) {
+        // list orders to check discount usage limits
+        const url = '/orders.json?fields=status' +
+          `&extra_discount.app.label${(discountRule.case_insensitive ? '%=' : '=')}` +
+          encodeURIComponent(label)
+        const usageLimits = [{
+          // limit by customer
+          query: customer.doc_number
+            ? `&buyers.doc_number=${customer.doc_number}`
+            : `&buyers._id=${customer._id}`,
+          max: discountRule.usage_limit
+        }, {
+          // total limit
+          query: '',
+          max: discountRule.total_usage_limit
+        }]
+        for (let i = 0; i < usageLimits.length; i++) {
+          const { query, max } = usageLimits[i]
+          if (max) {
+            // send Store API request to list orders with filters
+            const { response } = await appSdk.apiRequest(storeId, `${url}${query}`)
+            const countOrders = response.data.result
+              .filter(({ status }) => status !== 'cancelled')
+              .length
+            if (countOrders >= max) {
+              // limit reached
+              return false
+            }
+          }
+        }
+      }
+      return true
     }
 
     const getDiscountValue = (discount, maxDiscount) => {
@@ -230,7 +273,8 @@ module.exports = appSdk => {
       // check buy together recommendations
       const buyTogether = []
 
-      kitDiscounts.forEach((kitDiscount, index) => {
+      for (let index = 0; index < kitDiscounts.length; index++) {
+        const kitDiscount = kitDiscounts[index]
         if (kitDiscount) {
           const productIds = Array.isArray(kitDiscount.product_ids)
             ? kitDiscount.product_ids
@@ -348,23 +392,34 @@ module.exports = appSdk => {
                 }
               }
             }
-            // apply cumulative discount \o/
-            if (kitDiscount.same_product_quantity) {
-              kitItems.forEach((item, i) => {
-                addDiscount(
-                  discount,
-                  `KIT-${(index + 1)}-${i}`,
-                  kitDiscount.label,
-                  ecomUtils.price(item) * (item.quantity || 1)
-                )
+
+            try {
+              const isAvailable = await checkUsageLimit(kitDiscount)
+              if (isAvailable) {
+                // apply cumulative discount \o/
+                if (kitDiscount.same_product_quantity) {
+                  kitItems.forEach((item, i) => {
+                    addDiscount(
+                      discount,
+                      `KIT-${(index + 1)}-${i}`,
+                      kitDiscount.label,
+                      ecomUtils.price(item) * (item.quantity || 1)
+                    )
+                  })
+                } else {
+                  addDiscount(discount, `KIT-${(index + 1)}`, kitDiscount.label)
+                }
+                discountedItemIds = discountedItemIds.concat(kitItems.map(item => item.product_id))
+              }
+            } catch (err) {
+              return res.status(409).send({
+                error: 'CANT_CHECK_USAGE_LIMITS',
+                message: err.message
               })
-            } else {
-              addDiscount(discount, `KIT-${(index + 1)}`, kitDiscount.label)
             }
-            discountedItemIds = discountedItemIds.concat(kitItems.map(item => item.product_id))
           }
         }
-      })
+      }
       if (buyTogether.length) {
         response.buy_together = buyTogether
       }
@@ -519,61 +574,21 @@ module.exports = appSdk => {
               }
             }
 
-            const { customer } = params
-            if (
-              customer && (customer._id || customer.doc_number) &&
-              (discountRule.usage_limit > 0 || discountRule.total_usage_limit > 0)
-            ) {
-              // list orders to check discount usage limits
-              return (async function () {
-                const url = '/orders.json?fields=status' +
-                  `&extra_discount.app.label${(discountRule.case_insensitive ? '%=' : '=')}` +
-                  encodeURIComponent(label)
-                const usageLimits = [{
-                  // limit by customer
-                  query: customer.doc_number
-                    ? `&buyers.doc_number=${customer.doc_number}`
-                    : `&buyers._id=${customer._id}`,
-                  max: discountRule.usage_limit
-                }, {
-                  // total limit
-                  query: '',
-                  max: discountRule.total_usage_limit
-                }]
-
-                for (let i = 0; i < usageLimits.length; i++) {
-                  const { query, max } = usageLimits[i]
-                  if (max) {
-                    let countOrders
-                    try {
-                      // send Store API request to list orders with filters
-                      const { response } = await appSdk.apiRequest(storeId, `${url}${query}`)
-                      countOrders = response.data.result
-                        .filter(({ status }) => status !== 'cancelled')
-                        .length
-                    } catch (err) {
-                      return res.status(409).send({
-                        error: 'CANT_CHECK_USAGE_LIMITS',
-                        message: err.message
-                      })
-                    }
-
-                    if (countOrders >= max) {
-                      // limit reached
-                      addFreebies()
-                      response.invalid_coupon_message = params.lang === 'pt_br'
-                        ? 'A promoção não pôde ser aplicada porque já atingiu o limite de usos'
-                        : 'The promotion could not be applied because it has already reached the usage limit'
-                      return respondSuccess()
-                    }
-                  }
-                }
-                addFreebies()
-                respondSuccess()
-              })()
-            } else {
+            try {
+              const isAvailable = await checkUsageLimit(discountRule, label)
+              if (!isAvailable) {
+                delete response.discount_rule
+                response.invalid_coupon_message = params.lang === 'pt_br'
+                  ? 'A promoção não pôde ser aplicada porque já atingiu o limite de usos'
+                  : 'The promotion could not be applied because it has already reached the usage limit'
+              }
               addFreebies()
               return respondSuccess()
+            } catch (err) {
+              return res.status(409).send({
+                error: 'CANT_CHECK_USAGE_LIMITS',
+                message: err.message
+              })
             }
           }
         }

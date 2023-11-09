@@ -282,6 +282,13 @@
                 "title": "ID do cliente"
               }
             },
+            "usage_limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "title": "Limite de uso por cliente",
+              "description": "Limite opcional da promoção por kit a cada cliente (necessário preencher o rótulo da promoção)"
+            },
             "discount": {
               "title": "Desconto predefinido",
               "type": "object",
