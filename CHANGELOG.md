@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.20.0](https://github.com/ecomplus/discounts/compare/v1.19.0...v1.20.0) (2023-11-09)
+
+
+### Features
+
+* add option to configure usage limit (per customer) for kit discounts ([f184e6e](https://github.com/ecomplus/discounts/commit/f184e6e6be75af92e6314719d7d5aa8166939b75))
+
 ## [1.19.0](https://github.com/ecomplus/discounts/compare/v1.18.0...v1.19.0) (2023-11-06)
 
 
