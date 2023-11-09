@@ -305,7 +305,7 @@ module.exports = appSdk => {
               return item.quantity && discountedItemIds.indexOf(item.product_id) === -1
             })
             if (!kitItems.length) {
-              return
+              continue
             }
 
             const recommendBuyTogether = () => {
@@ -352,9 +352,9 @@ module.exports = appSdk => {
                 })
                 if (totalQuantity < kitDiscount.min_quantity) {
                   if (productIds.length > 1 && kitDiscount.check_all_items !== false) {
-                    return recommendBuyTogether()
+                    recommendBuyTogether()
                   }
-                  return
+                  continue
                 }
                 if (discount.type === 'fixed' && kitDiscount.cumulative_discount !== false) {
                   discount.value *= Math.floor(totalQuantity / kitDiscount.min_quantity)
@@ -367,11 +367,14 @@ module.exports = appSdk => {
               !(discount.min_amount > params.amount.total - getFreebiesPreview().value)
             ) {
               if (kitDiscount.check_all_items !== false) {
+                let isSkip = false
                 for (let i = 0; i < productIds.length; i++) {
                   const productId = productIds[i]
                   if (productId && !kitItems.find(item => item.quantity && item.product_id === productId)) {
                     // product not on current cart
-                    return recommendBuyTogether()
+                    recommendBuyTogether()
+                    isSkip = true
+                    break
                   }
                 }
                 if (categoryIds.length) {
@@ -388,10 +391,13 @@ module.exports = appSdk => {
                       }
                     }
                     if (!hasListedCategory) {
-                      return recommendBuyTogether()
+                      recommendBuyTogether()
+                      isSkip = true
+                      break
                     }
                   }
                 }
+                if (isSkip) continue
               }
 
               try {
