@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.20.1](https://github.com/ecomplus/discounts/compare/v1.20.0...v1.20.1) (2023-11-09)
+
+
+### Bug Fixes
+
+* prevent async/await error with express route ([b956759](https://github.com/ecomplus/discounts/commit/b95675929d7e159dccf054b438483f6900addc35))
+
 ## [1.20.0](https://github.com/ecomplus/discounts/compare/v1.19.0...v1.20.0) (2023-11-09)
 
 
