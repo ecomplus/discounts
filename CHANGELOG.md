@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.20.2](https://github.com/ecomplus/discounts/compare/v1.20.1...v1.20.2) (2023-11-09)
+
+
+### Bug Fixes
+
+* prevent early return and unresponded request on kit loop ([e985439](https://github.com/ecomplus/discounts/commit/e985439498540c152f505b26c6ce8b917d419b89))
+
 ### [1.20.1](https://github.com/ecomplus/discounts/compare/v1.20.0...v1.20.1) (2023-11-09)
 
 
