@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.20.3](https://github.com/ecomplus/discounts/compare/v1.20.2...v1.20.3) (2023-11-10)
+
+
+### Bug Fixes
+
+* skip kit discounts quantity multiplier when usage limit is set ([4d9cb5f](https://github.com/ecomplus/discounts/commit/4d9cb5f41dd3f4a0fc70f0e93f60c798236dc2f2))
+
 ### [1.20.2](https://github.com/ecomplus/discounts/compare/v1.20.1...v1.20.2) (2023-11-09)
 
 
