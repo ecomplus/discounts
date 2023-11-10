@@ -356,7 +356,11 @@ module.exports = appSdk => {
                   }
                   continue
                 }
-                if (discount.type === 'fixed' && kitDiscount.cumulative_discount !== false) {
+                if (
+                  discount.type === 'fixed' &&
+                  kitDiscount.cumulative_discount !== false &&
+                  !kitDiscount.usage_limit
+                ) {
                   discount.value *= Math.floor(totalQuantity / kitDiscount.min_quantity)
                 }
               }
