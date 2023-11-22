@@ -171,13 +171,17 @@ module.exports = appSdk => {
               }
               // start calculating discount
               let value = 0
+              let fixedSubtotal = subtotal
               rule.product_ids.forEach(productId => {
-                const item = subtotalItems.find(item => productId === item.product_id)
+                const item = params.items.find(item => productId === item.product_id)
                 if (item) {
-                  value += ecomUtils.price(item)
+                  const price = ecomUtils.price(item)
+                  value += price
+                  if (subtotalItems.find(item => productId === item.product_id)) {
+                    fixedSubtotal -= price
+                  }
                 }
               })
-              let fixedSubtotal = subtotal - value
               if (rule.deduct_discounts) {
                 if (response.discount_rule) {
                   fixedSubtotal -= response.discount_rule.extra_discount.value
