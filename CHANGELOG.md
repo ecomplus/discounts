@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.20.5](https://github.com/ecomplus/discounts/compare/v1.20.4...v1.20.5) (2023-11-22)
+
+
+### Bug Fixes
+
+* fix regression calculating freebies discount value ([6747e6d](https://github.com/ecomplus/discounts/commit/6747e6d7839475d89557b6c155a8a885f4804be7))
+* may accept repeated freebies on many cumulative rules ([e744f22](https://github.com/ecomplus/discounts/commit/e744f22a2f432e0df062b5e95c9d0c69cc55b18a))
+
 ### [1.20.4](https://github.com/ecomplus/discounts/compare/v1.20.3...v1.20.4) (2023-11-22)
 
 
