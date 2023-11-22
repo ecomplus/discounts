@@ -210,13 +210,6 @@ module.exports = appSdk => {
               if (discountValue) {
                 if (bestRule.cumulative_freebie === true) {
                   cumulativeRules.forEach(({ rule, value }) => {
-                    for (let i = 0; i < response.freebie_product_ids.length; i++) {
-                      const productId = response.freebie_product_ids[i]
-                      if (rule.product_ids.includes(productId)) {
-                        // ignoring cumulative freebie rules with repeated products
-                        return
-                      }
-                    }
                     discountValue += value
                     rule.product_ids.forEach((productId) => {
                       response.freebie_product_ids.push(productId)
